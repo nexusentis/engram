@@ -1,0 +1,8 @@
+{
+  "label": "Dead Ends & Failed Experiments",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Everything we tried that didn't work, and the engineering discipline rules extracted from $1,400+ of experiments."
+  }
+}

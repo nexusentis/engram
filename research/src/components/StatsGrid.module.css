@@ -1,0 +1,135 @@
+.section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.heading {
+  font-family: var(--engram-font-sans);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--engram-text);
+  margin: 0 0 1.75rem 0;
+}
+
+/* -- Featured stats (top row, larger) -- */
+
+.featured {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.featuredCard {
+  background: var(--engram-surface);
+  border: 1px solid var(--engram-border);
+  border-radius: 8px;
+  padding: 2rem 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.featuredValue {
+  font-family: var(--engram-font-sans);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--engram-amber);
+  line-height: 1;
+}
+
+.featuredLabel {
+  font-family: var(--engram-font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--engram-text);
+  margin-top: 0.5rem;
+}
+
+.featuredSublabel {
+  font-family: var(--engram-font-sans);
+  font-size: 0.82rem;
+  color: var(--engram-muted);
+  line-height: 1.4;
+}
+
+/* -- Supporting stats (bottom row, compact) -- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.card {
+  background: var(--engram-surface);
+  border: 1px solid var(--engram-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.value {
+  font-family: var(--engram-font-sans);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--engram-amber);
+  line-height: 1.1;
+}
+
+.label {
+  font-family: var(--engram-font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--engram-text);
+  margin-top: 0.35rem;
+}
+
+.sublabel {
+  font-family: var(--engram-font-sans);
+  font-size: 0.72rem;
+  color: var(--engram-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .featured {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .featured {
+    grid-template-columns: 1fr;
+  }
+
+  .featuredValue {
+    font-size: 2.5rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+
+  .value {
+    font-size: 1.5rem;
+  }
+}

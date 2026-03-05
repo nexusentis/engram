@@ -1,0 +1,88 @@
+name: Benchmark Regression
+
+on:
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: 'Benchmark tier to run'
+        required: true
+        default: 'fast'
+        type: choice
+        options:
+          - fast
+          - gate
+          - truth
+  schedule:
+    - cron: '0 6 * * 1'  # Weekly Monday 6am UTC
+
+env:
+  CARGO_TERM_COLOR: always
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Start Qdrant
+        run: |
+          docker run -d --name qdrant \
+            -p 6333:6333 -p 6334:6334 \
+            qdrant/qdrant:v1.17.0
+
+      - name: Wait for Qdrant
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:6333/collections; then
+              echo "Qdrant is ready"
+              exit 0
+            fi
+            echo "Waiting for Qdrant..."
+            sleep 2
+          done
+          echo "Qdrant failed to start within 60s"
+          exit 1
+
+      - name: Build
+        run: cargo build --release -p engram
+
+      - name: Run benchmark
+        run: |
+          TIER="${{ github.event.inputs.tier || 'fast' }}"
+          case "$TIER" in
+            fast)
+              QUESTION_IDS=@data/longmemeval/fast_60.txt \
+                cargo test --release --test integration_benchmark test_validation_benchmark -- --ignored --nocapture \
+                > benchmark_output.txt 2>&1
+              ;;
+            gate)
+              QUESTION_IDS=@data/longmemeval/gate_231.txt \
+                cargo test --release --test integration_benchmark test_validation_benchmark -- --ignored --nocapture \
+                > benchmark_output.txt 2>&1
+              ;;
+            truth)
+              FULL_BENCHMARK=1 \
+                cargo test --release --test integration_benchmark test_validation_benchmark -- --ignored --nocapture \
+                > benchmark_output.txt 2>&1
+              ;;
+          esac
+          BENCHMARK_EXIT=$?
+          cat benchmark_output.txt
+          exit $BENCHMARK_EXIT
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ github.event.inputs.tier || 'fast' }}
+          path: benchmark_output.txt
+          retention-days: 90

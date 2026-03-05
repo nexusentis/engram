@@ -1,0 +1,140 @@
+.section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.heading {
+  font-family: var(--engram-font-sans);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--engram-text);
+  margin: 0 0 0.35rem 0;
+}
+
+.subheading {
+  font-family: var(--engram-font-mono);
+  font-size: 0.8rem;
+  color: var(--engram-muted);
+  margin: 0 0 2rem 0;
+  letter-spacing: 0.05em;
+}
+
+/* -- Bar chart layout -- */
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: background 0.2s ease;
+}
+
+.rank {
+  font-family: var(--engram-font-mono);
+  font-size: 0.85rem;
+  color: var(--engram-muted);
+  min-width: 1.5rem;
+  padding-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.name {
+  font-family: var(--engram-font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--engram-text);
+}
+
+.score {
+  font-family: var(--engram-font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--engram-muted);
+}
+
+.barTrack {
+  height: 6px;
+  border-radius: 2px;
+  background: var(--engram-border);
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--engram-muted);
+  opacity: 0.4;
+  transition: width 0.8s ease-out;
+}
+
+.arch {
+  font-family: var(--engram-font-sans);
+  font-size: 0.78rem;
+  color: var(--engram-muted);
+  opacity: 0.7;
+}
+
+/* -- Engram highlight -- */
+
+.engram {
+  background: var(--engram-amber-glow);
+  border-color: rgba(245, 158, 11, 0.15);
+}
+
+.engram .name {
+  font-weight: 600;
+  color: var(--engram-amber);
+}
+
+.engram .score {
+  color: var(--engram-amber);
+}
+
+.engram .barFill {
+  background: var(--engram-amber);
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+}
+
+.engram .arch {
+  opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+  .row {
+    padding: 0.75rem 1rem;
+  }
+
+  .arch {
+    display: none;
+  }
+}

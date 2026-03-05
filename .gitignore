@@ -1,0 +1,45 @@
+# OS files
+.DS_Store
+
+# Playwright MCP server state
+.playwright-mcp/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+target/
+
+# ONNX models (not used — reranker removed in Phase 8)
+*.onnx
+models/
+crates/engram/models/
+
+# Benchmark artifacts
+data/longmemeval/.qdrant_manifest.json
+data/longmemeval/.extraction_cache
+crates/engram/data/longmemeval/.extraction_cache/
+.extraction_cache/
+*checkpoint*.json
+pending_batch.json
+*.jsonl
+data/benchmarks/
+data/longmemeval/logs/
+data/longmemeval/snapshots/
+data/longmemeval/surrealdb/
+
+# Downloaded binaries
+bin/
+
+# Docusaurus
+research/node_modules/
+research/.docusaurus/
+research/build/
+docs/node_modules/
+docs/.docusaurus/
+docs/build/
+
+# Research working notes (local archive, not published)
+research/_archive/

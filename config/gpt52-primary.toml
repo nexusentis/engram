@@ -1,0 +1,34 @@
+# GPT-5.2 as primary answerer (first run — exploratory)
+# Usage: BENCHMARK_CONFIG=config/gpt52-primary.toml cargo test ...
+
+[answerer]
+model = "gpt-5.2"
+temperature = 0.0
+max_tokens = 500
+max_iterations = 20
+agentic = true
+
+[ingester]
+model = "gpt-4o-mini"
+concurrency = 100
+
+[benchmark]
+answer_concurrency = 10
+
+[[models]]
+name = "gpt-5.2"
+base_url = "https://api.openai.com/v1/chat/completions"
+api_key_env = "OPENAI_API_KEY"
+max_tokens_field = "max_completion_tokens"
+supports_temperature = true
+prompt_price_per_m = 1.75
+completion_price_per_m = 14.00
+
+[[models]]
+name = "gpt-4o-mini"
+base_url = "https://api.openai.com/v1/chat/completions"
+api_key_env = "OPENAI_API_KEY"
+max_tokens_field = "max_tokens"
+supports_temperature = true
+prompt_price_per_m = 0.15
+completion_price_per_m = 0.60

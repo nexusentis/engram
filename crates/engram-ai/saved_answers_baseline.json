@@ -1,0 +1,542 @@
+[
+  {
+    "category": "extraction",
+    "expected": "$800",
+    "generated": "$800",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How much did I spend on a designer handbag?",
+    "question_id": "7527f7e2"
+  },
+  {
+    "category": "extraction",
+    "expected": "500 Mbps",
+    "generated": "500 Mbps",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What speed is my new internet plan?",
+    "question_id": "ad7109d1"
+  },
+  {
+    "category": "extraction",
+    "expected": "6:30 pm",
+    "generated": "You usually get home from work around 6:30 pm on weekdays.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What time do I usually get home from work on weeknights?",
+    "question_id": "c19f7a0b"
+  },
+  {
+    "category": "extraction",
+    "expected": "The Glass Menagerie",
+    "generated": "The Glass Menagerie",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What play did I attend at the local community theater?",
+    "question_id": "58bf7951"
+  },
+  {
+    "category": "multi_session",
+    "expected": "140 hours",
+    "generated": "140 hours",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many hours have I spent playing games in total?",
+    "question_id": "28dc39ac"
+  },
+  {
+    "category": "abstention",
+    "expected": "You did not mention this information. You mentioned receiving a birthday gift from your sister, but not your dad.",
+    "generated": "I don't have enough information.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What did my dad gave me as a birthday gift?",
+    "question_id": "f4f1d8a4_abs"
+  },
+  {
+    "category": "extraction",
+    "expected": "Data Science",
+    "generated": "Data Science certification",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What certification did I complete last month?",
+    "question_id": "8ebdbe50"
+  },
+  {
+    "category": "multi_session",
+    "expected": "3",
+    "generated": "3 food delivery services. Items: 1) Domino's Pizza (from session on 2023/05/22), 2) Uber Eats (from session on 2023/05/27), 3) Fresh Fusion (from session on 2023/05/30).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many different types of food delivery services have I used recently?",
+    "question_id": "d682f1a2"
+  },
+  {
+    "category": "multi_session",
+    "expected": "4",
+    "generated": "5 cuisines: 1) Ethiopian (session on 2023/05/24), 2) Indian (session on 2023/05/26), 3) Korean (session on 2023/05/29), 4) Vegan (session on 2023/05/30), 5) Japanese (session on 2023/05/24).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many different cuisines have I learned to cook or tried out in the past few months?",
+    "question_id": "d23cf73b"
+  },
+  {
+    "category": "multi_session",
+    "expected": "10 years",
+    "generated": "To determine the total number of years you spent in formal education from high school to the completion of your Bachelor's degree, we need to consider the following:\n\n1. **High School**: You attended Arcadia High School from 2010 to 2014, which is 4 years.\n2. **Bachelor's Degree**: You completed your Bachelor's degree in Computer Science from UCLA in 2020, which took you 4 years.\n\nAdding these together, you spent a total of 8 years in formal education from high school to the completion of your Bachelor's degree.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many years in total did I spend in formal education from high school to the completion of my Bachelor's degree?",
+    "question_id": "gpt4_372c3eed"
+  },
+  {
+    "category": "multi_session",
+    "expected": "3 days",
+    "generated": "3 days. Items: 1) Workshop on standardization and normalization (from session on April 17th and 18th), 2) Lecture on sustainable development (from session on April 10th).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many days did I spend attending workshops, lectures, and conferences in April?",
+    "question_id": "10d9b85a"
+  },
+  {
+    "category": "multi_session",
+    "expected": "3",
+    "generated": "You have purchased or downloaded two music albums or EPs:\n\n1. Billie Eilish's album \"Happier Than Ever\" downloaded on Spotify.\n2. The Whiskey Wanderers' EP \"Midnight Sky\" purchased at a festival merchandise booth.",
+    "original_correct": false,
+    "original_score": 0.0,
+    "question": "How many music albums or EPs have I purchased or downloaded?",
+    "question_id": "bf659f65"
+  },
+  {
+    "category": "multi_session",
+    "expected": "3 days.",
+    "generated": "3 days. Items: 1) Bible study at church on December 17th (from session on 2024/01/10), 2) Volunteering at church's holiday food drive on December 10th (from session on 2024/01/10), 3) Midnight mass at St. Mary's Church on December 24th (from session on 2024/01/10).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many days did I spend participating in faith-related activities in December?",
+    "question_id": "5a7937c8"
+  },
+  {
+    "category": "multi_session",
+    "expected": "15 hours for getting to the three destinations (or 30 hours for the round trip)",
+    "generated": "15 hours. Items: 1) Outer Banks, North Carolina - 4 hours (from session on 2023/05/21), 2) Mountains in Tennessee - 5 hours (from session on 2023/05/21), 3) Washington D.C. - 6 hours (from session on 2023/05/26).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many hours in total did I spend driving to my three road trip destinations combined?",
+    "question_id": "aae3761f"
+  },
+  {
+    "category": "abstention",
+    "expected": "The information provided is not enough. You mentioned traveling for 10 days in Hawaii but did not mention abything about the trip to Seattle.",
+    "generated": "I don't have enough information to determine how many days you spent traveling in Seattle. However, I found that you spent 10 days in Hawaii.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many days did I spend in total traveling in Hawaii and in Seattle?",
+    "question_id": "edced276_abs"
+  },
+  {
+    "category": "extraction",
+    "expected": "The user would prefer responses that acknowledge and build upon their existing efforts to organize their kitchen, such as utilizing their new utensil holder to keep countertops clutter-free. They would also appreciate tips that address their concern for maintaining their granite surface, particularly around the sink area. Preferred responses would provide practical and actionable steps to maintain cleanliness, leveraging the user's current tools and setup. They might not prefer generic or vague suggestions that do not take into account their specific kitchen setup or concerns.",
+    "generated": "To keep your kitchen clean and organized, consider building on your recent efforts with the new utensil holder. Regularly purge unnecessary items and use dividers to keep utensils sorted. Since you've had issues with scratches on your granite countertop, be mindful of using cutting boards and coasters to prevent further damage. Regular cleaning and maintenance of your utensil holder and countertops will help maintain a tidy kitchen environment.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "My kitchen's becoming a bit of a mess again. Any tips for keeping it clean?",
+    "question_id": "afdc33df"
+  },
+  {
+    "category": "extraction",
+    "expected": "The user would prefer responses that suggest cultural events where they can practice their language skills, particularly Spanish and French. They would also appreciate if the event has a focus on language learning resources. They would not prefer events that do not provide opportunities for language practice or cultural exchange.",
+    "generated": "While you're in Medellín this weekend, you might enjoy visiting Mercado Minorista, a vibrant market in the El Poblado neighborhood, where you can experience local snacks, fruits, and drinks. Additionally, consider joining the Medellín Language Exchange group on Facebook or the Language Exchange Medellín Meetup group for cultural events and language practice opportunities. Enjoy your stay!",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "Can you recommend some interesting cultural events happening around me this weekend?",
+    "question_id": "35a27287"
+  },
+  {
+    "category": "extraction",
+    "expected": "The user would prefer responses that build upon their existing sources of inspiration, such as revisiting Instagram art accounts or exploring new techniques from online tutorials. They might also appreciate suggestions that revisit previous themes they found enjoyable, like painting flowers. The user would not prefer generic or vague suggestions for finding inspiration, and would likely appreciate responses that utilize their recent 30-day painting challenge experience.",
+    "generated": "To find new inspiration for your paintings, consider building on your recent experiences and interests. Since you've been getting inspiration from social media and have started a 30-day painting challenge, you might want to explore new themes or techniques that align with your current interests. For instance, you've been looking at flower paintings on Instagram and seeking tips on painting realistic flowers. You could dive deeper into this theme by experimenting with different styles or mediums, such as using palette knives to add texture or trying out new color palettes.\n\nAdditionally, setting up a small studio space in your apartment could provide a fresh environment that sparks creativity. Surround yourself with elements that inspire you, like art pieces, quotes, or even plants, to create a motivating atmosphere. Engaging with online art communities or joining a local art class could also introduce you to new ideas and techniques, while providing the social connection you find fulfilling.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "I've been feeling a bit stuck with my paintings lately. Do you have any ideas on how I can find new inspiration?",
+    "question_id": "6b7dfb22"
+  },
+  {
+    "category": "extraction",
+    "expected": "The user would prefer baking suggestions that take into account their previous success with the lemon poppyseed cake, such as variations of that recipe or other desserts that share similar qualities. They might prefer suggestions that balance impressiveness with manageability, considering their previous experience. The user may not prefer overly complex or unfamiliar recipes, or suggestions that do not build upon their existing baking experience.",
+    "generated": "Since you've been experimenting with baking cookies and are interested in trying different flavors, you might enjoy making a batch of oatmeal raisin cookies with nuts for your gathering. This aligns with your interest in healthier cookie options and experimenting with flavors. You could also consider making a lemon poppyseed cake, as you've had success with it before and it was a hit at a colleague's going-away party. These options should cater to both your baking interests and your colleagues' tastes.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "I'm thinking of inviting my colleagues over for a small gathering. Any tips on what to bake?",
+    "question_id": "d24813b1"
+  },
+  {
+    "category": "multi_session",
+    "expected": "$50",
+    "generated": "The total cost is $50. This includes the food bowl ($15), measuring cup ($5), dental chews ($10), and flea and tick collar ($20).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What is the total cost of the new food bowl, measuring cup, dental chews, and flea and tick collar I got for Max?",
+    "question_id": "85fa3a3f"
+  },
+  {
+    "category": "extraction",
+    "expected": "The user would prefer responses that build upon their previous mention of purchasing a portable power bank, such as suggestions on how to optimize its use, like ensuring it's fully charged before use. They might also appreciate tips on utilizing battery-saving features on their phone. The user may not prefer responses that suggest alternative solutions or unrelated advice.",
+    "generated": "I don't have enough information about your specific phone battery issues. However, here are some general tips that might help improve your phone's battery life:\n\n1. **Reduce Screen Brightness**: Lowering your screen brightness or setting it to auto can help conserve battery life.\n\n2. **Limit Background Apps**: Close apps running in the background that you aren't using, as they can drain your battery.\n\n3. **Use Battery Saver Mode**: Most smartphones have a battery saver mode that limits background activity and reduces performance to extend battery life.\n\n4. **Disable Unnecessary Notifications**: Turn off notifications for apps that aren't essential to reduce battery usage.\n\n5. **Update Apps and Software**: Ensure your apps and phone software are up to date, as updates often include battery optimization improvements.\n\n6. **Check Battery Usage**: Look at your phone's battery usage settings to see which apps are consuming the most power and consider limiting their use.\n\nIf you have specific concerns or need more personalized advice, feel free to share more details about your phone model and usage habits!",
+    "original_correct": false,
+    "original_score": 0.0,
+    "question": "I've been having trouble with the battery life on my phone lately. Any tips?",
+    "question_id": "09d032c9"
+  },
+  {
+    "category": "extraction",
+    "expected": "Considering their mixology class background, the user would prefer cocktail suggestions that build upon their existing skills and interests, such as creative variations of classic cocktails or innovative twists on familiar flavors. They might appreciate recommendations that incorporate their experience with refreshing summer drinks like Pimm's Cup. The user would not prefer overly simplistic or basic cocktail recipes, and may not be interested in suggestions that don't take into account their mixology class background.",
+    "generated": "Since you enjoyed experimenting with Hendrick's gin and have already tried the Pimm's Cup with a Twist, you might like to try the \"Cucumber Gimlet.\" It's a refreshing twist on the classic Gimlet, combining Hendrick's gin with fresh lime juice, simple syrup, and cucumber juice. This cocktail is light and perfect for a summer get-together. Enjoy mixing!",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "I've been thinking about making a cocktail for an upcoming get-together, but I'm not sure which one to choose. Any suggestions?",
+    "question_id": "1a1907b4"
+  },
+  {
+    "category": "extraction",
+    "expected": "The user would prefer responses that suggest variations on their existing almond milk, vanilla extract, and honey creamer recipe or new ideas that align with their goals of reducing sugar intake and saving money. They might not prefer responses that recommend commercial creamer products or recipes that are high in sugar or expensive.",
+    "generated": "Since you've been making your own flavored creamer with almond milk, vanilla extract, and honey, you might enjoy experimenting with some new flavor combinations. Consider trying cashew or oat milk for a creamier texture, and add spices like cinnamon or cardamom for a unique taste. You could also explore using alternative sweeteners like stevia or monk fruit to reduce sugar content. Additionally, incorporating a scoop of probiotic powder or a spoonful of probiotic-rich yogurt can enhance the health benefits of your creamer. Enjoy your creative brewing!",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "I was thinking of trying a new coffee creamer recipe. Any recommendations?",
+    "question_id": "505af2f5"
+  },
+  {
+    "category": "multi_session",
+    "expected": "43",
+    "generated": "Your grandma is 75 years old, and you are in your 30s. Assuming you are 32, your grandma is 43 years older than you.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many years older is my grandma than me?",
+    "question_id": "157a136e"
+  },
+  {
+    "category": "extraction",
+    "expected": "The user would prefer responses that take into account their current home network storage capacity issues and recent reliance on external hard drives, highlighting the potential benefits of a NAS device in addressing these specific needs. They might not prefer responses that ignore their current storage challenges or fail to consider their recent tech upgrades and priorities. Preferred responses would utilize the user's previous mentions of storage capacity issues and tech investments to inform their decision.",
+    "generated": "I don't have enough information to provide a recommendation on whether you should buy a NAS device now or wait.",
+    "original_correct": false,
+    "original_score": 0.0,
+    "question": "I'm trying to decide whether to buy a NAS device now or wait. What do you think?",
+    "question_id": "1da05512"
+  },
+  {
+    "category": "multi_session",
+    "expected": "two",
+    "generated": "2 sports. Items: 1) Swimming (from session on 2023/05/26), 2) Tennis (from session on 2023/05/26).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many sports have I played competitively in the past?",
+    "question_id": "ef66a6e5"
+  },
+  {
+    "category": "temporal",
+    "expected": "7 days. 8 days (including the last day) is also acceptable.",
+    "generated": "7 days",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many days passed between my visit to the Museum of Modern Art (MoMA) and the 'Ancient Civilizations' exhibit at the Metropolitan Museum of Art?",
+    "question_id": "gpt4_59149c77"
+  },
+  {
+    "category": "multi_session",
+    "expected": "$300",
+    "generated": "You spent $200 on a silver necklace from Tiffany's and $100 on a spa gift card for your sister, totaling $300.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How much did I spend on gifts for my sister?",
+    "question_id": "ef9cf60a"
+  },
+  {
+    "category": "abstention",
+    "expected": "The information provided is not enough. You did not mention how old Rachel is right now, nor when will you get married.",
+    "generated": "I don't have enough information to determine how old Rachel will be when you get married.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How old will Rachel be when I get married?",
+    "question_id": "ba358f49_abs"
+  },
+  {
+    "category": "multi_session",
+    "expected": "5",
+    "generated": "5 antique items. Items: 1) Antique tea set from cousin Rachel (session on 2023/05/25), 2) Vintage typewriter from dad (session on 2023/05/25), 3) Vintage diamond necklace from grandmother (session on 2023/05/30), 4) Antique music box from great-aunt (session on 2023/05/30), 5) Depression-era glassware from mom (session on 2023/05/30).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many antique items did I inherit or acquire from my family members?",
+    "question_id": "4f54b7c9"
+  },
+  {
+    "category": "multi_session",
+    "expected": "$5",
+    "generated": "$5 discount. Items: 1) 500 points reached for discount (from session on 2023/05/24), 2) 500 points equals $5 discount (from session on 2023/05/27).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How much discount will I get on my next purchase at FreshMart?",
+    "question_id": "e56a43b9"
+  },
+  {
+    "category": "temporal",
+    "expected": "18 days. 19 days (including the last day) is also acceptable.",
+    "generated": "18 days",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many days had passed since I finished reading 'The Seven Husbands of Evelyn Hugo' when I attended the book reading event at the local library, where the author of 'The Silent Patient' is discussing her latest thriller novel?",
+    "question_id": "0db4c65d"
+  },
+  {
+    "category": "multi_session",
+    "expected": "10%",
+    "generated": "The cost of the renovations ($20,000) is 10% of the countryside property's price ($200,000).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What percentage of the countryside property's price is the cost of the renovations I plan to do on my current house?",
+    "question_id": "27016adc"
+  },
+  {
+    "category": "temporal",
+    "expected": "the 'Walk for Hunger' charity event",
+    "generated": "You participated in the 'Walk for Hunger' charity event a month ago, on March 19, 2023.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What charity event did I participate in a month ago?",
+    "question_id": "b46e15ee"
+  },
+  {
+    "category": "temporal",
+    "expected": "24 days. 25 days (including the last day) is also acceptable.",
+    "generated": "24 days",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many days had passed since I started taking ukulele lessons when I decided to take my acoustic guitar to the guitar tech for servicing?",
+    "question_id": "4dfccbf7"
+  },
+  {
+    "category": "temporal",
+    "expected": "15",
+    "generated": "11 weeks",
+    "original_correct": false,
+    "original_score": 0.0,
+    "question": "How many weeks had passed since I recovered from the flu when I went on my 10th jog outdoors?",
+    "question_id": "370a8ff4"
+  },
+  {
+    "category": "temporal",
+    "expected": "1 day. 2 days (including the last day) is also acceptable.",
+    "generated": "1 day",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many days passed between the day I finished reading 'The Nightingale' and the day I started reading 'The Hitchhiker's Guide to the Galaxy'?",
+    "question_id": "gpt4_4ef30696"
+  },
+  {
+    "category": "temporal",
+    "expected": "First, I used a Buy One Get One Free coupon on Luvs diapers at Walmart. Then, I redeemed $12 cashback for a $10 Amazon gift card from Ibotta. Finally, I signed up for the rewards program at ShopRite.",
+    "generated": "1. Used a Buy One Get One Free coupon on Luvs diapers at Walmart (2023/04/01)\n2. Redeemed $12 cashback for a $10 Amazon gift card from Ibotta (2023/04/10)\n3. Signed up for the rewards program at ShopRite (2023/04/15)",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What is the order of the three events: 'I signed up for the rewards program at ShopRite', 'I used a Buy One Get One Free coupon on Luvs diapers at Walmart', and 'I redeemed $12 cashback for a $10 Amazon gift card from Ibotta'?",
+    "question_id": "gpt4_18c2b244"
+  },
+  {
+    "category": "temporal",
+    "expected": "Page Turners",
+    "generated": "You joined 'Page Turners' first, last week, and 'Marketing Professionals' yesterday.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "Which group did I join first, 'Page Turners' or 'Marketing Professionals'?",
+    "question_id": "gpt4_93f6379c"
+  },
+  {
+    "category": "temporal",
+    "expected": "Receiving the new phone case",
+    "generated": "The narrator received their new phone case first, about a month ago, while they lost their phone charger about two weeks ago.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "Which event happened first, the narrator losing their phone charger or the narrator receiving their new phone case?",
+    "question_id": "gpt4_78cf46a3"
+  },
+  {
+    "category": "temporal",
+    "expected": "a smoker",
+    "generated": "You bought a smoker 10 days ago on March 15th.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What kitchen appliance did I buy 10 days ago?",
+    "question_id": "gpt4_8279ba03"
+  },
+  {
+    "category": "temporal",
+    "expected": "one week",
+    "generated": "1 week",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many weeks have I been accepted into the exchange program when I started attending the pre-departure orientation sessions?",
+    "question_id": "gpt4_4cd9eba1"
+  },
+  {
+    "category": "temporal",
+    "expected": "the woman selling jam at the farmer's market",
+    "generated": "I don't have enough information to determine who you met first, the woman selling jam at the farmer's market or the tourist from Australia.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "Who did I meet first, the woman selling jam at the farmer's market or the tourist from Australia?",
+    "question_id": "gpt4_0a05b494"
+  },
+  {
+    "category": "updates",
+    "expected": "Friday",
+    "generated": "Friday",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What day of the week do I take a cocktail-making class?",
+    "question_id": "ce6d2d27"
+  },
+  {
+    "category": "temporal",
+    "expected": "road bike",
+    "generated": "I don't have enough information.",
+    "original_correct": false,
+    "original_score": 0.0,
+    "question": "Which bike did I fixed or serviced the past weekend?",
+    "question_id": "gpt4_e414231f"
+  },
+  {
+    "category": "updates",
+    "expected": "five",
+    "generated": "Five sessions.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many sessions of the bereavement support group did I attend?",
+    "question_id": "f9e8c073"
+  },
+  {
+    "category": "updates",
+    "expected": "3 months",
+    "generated": "3 months",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How long have I been living in my current apartment in Harajuku?",
+    "question_id": "2133c1b5"
+  },
+  {
+    "category": "updates",
+    "expected": "Five",
+    "generated": "You have finished reading five issues of National Geographic.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many issues of National Geographic have I finished reading?",
+    "question_id": "8fb83627"
+  },
+  {
+    "category": "temporal",
+    "expected": "Japanese Zero fighter plane model",
+    "generated": "You started the Japanese Zero fighter plane model first, about a month ago (around April 29, 2023), and the Ferrari model about three weeks ago (around May 7, 2023).",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "Which project did I start first, the Ferrari model or the Japanese Zero fighter plane model?",
+    "question_id": "gpt4_c27434e8"
+  },
+  {
+    "category": "updates",
+    "expected": "10 pounds",
+    "generated": "10 pounds",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How much weight have I lost since I started going to the gym consistently?",
+    "question_id": "cf22b7bf"
+  },
+  {
+    "category": "updates",
+    "expected": "9 months",
+    "generated": "You have had your cat, Luna, for about 9 months.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How long have I had my cat, Luna?",
+    "question_id": "e61a7584"
+  },
+  {
+    "category": "extraction",
+    "expected": "I suggested 'sexual fixations', 'problematic sexual behaviors', 'sexual impulsivity', and 'compulsive sexuality'.",
+    "generated": "The other four options suggested were 'sexual fixations', 'problematic sexual behaviors', 'sexual impulsivity', and 'compulsive sexuality'.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "In our previous chat, you suggested 'sexual compulsions' and a few other options for alternative terms for certain behaviors. Can you remind me what the other four options were?",
+    "question_id": "ceb54acb"
+  },
+  {
+    "category": "updates",
+    "expected": "five",
+    "generated": "Five trips",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "How many trips have I taken my Canon EOS 80D camera on?",
+    "question_id": "26bdc477"
+  },
+  {
+    "category": "abstention",
+    "expected": "The information provided is not enough. You mentioned fixing the fence but did not mention purchasing cows from Peter.",
+    "generated": "I don't have enough information.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "Which task did I complete first, fixing the fence or purchasing three cows from Peter?",
+    "question_id": "gpt4_70e84552_abs"
+  },
+  {
+    "category": "extraction",
+    "expected": "Andy was wearing an untidy, stained white shirt.",
+    "generated": "Andy was wearing an untidy, stained white shirt in the script for the comedy movie scene.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "I was going through our previous chat and I was wondering, what was Andy wearing in the script you wrote for the comedy movie scene?",
+    "question_id": "4388e9dd"
+  },
+  {
+    "category": "updates",
+    "expected": "Instant Pot",
+    "generated": "Instant Pot",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "What new kitchen gadget did I invest in before getting the Air Fryer?",
+    "question_id": "0977f2af"
+  },
+  {
+    "category": "extraction",
+    "expected": "The video is 'How to Sit Properly at a Desk to Avoid Back Pain' and the link is https://www.youtube.com/watch?v=UfOvNlX9Hh0.",
+    "generated": "The Mayo Clinic video I recommended is titled \"How to Sit Properly at a Desk to Avoid Back Pain.\" You can find it on YouTube here: https://www.youtube.com/watch?v=UfOvNlX9Hh0.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "I wanted to follow up on our previous conversation about YouTube videos for workplace posture. Can you remind me of the Mayo Clinic video you recommended?",
+    "question_id": "41275add"
+  },
+  {
+    "category": "abstention",
+    "expected": "The information provided is not enough. You did not mention starting the Porsche 991 Turbo S model.",
+    "generated": "I don't have enough information to answer this question.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "Which project did I start first, the Ferrari model or the Porsche 991 Turbo S model?",
+    "question_id": "gpt4_c27434e8_abs"
+  },
+  {
+    "category": "extraction",
+    "expected": "Pennsylvania",
+    "generated": "Pennsylvania",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "I wanted to follow up on our previous conversation about fracking in the Marcellus Shale region. You mentioned that some states require fracking companies to monitor groundwater quality at nearby wells before drilling and for a certain period after drilling is complete. Can you remind me which state you mentioned as an example that has this requirement?",
+    "question_id": "c8f1aeed"
+  },
+  {
+    "category": "temporal",
+    "expected": "No, you did not visit with a friend.",
+    "generated": "I don't have enough information to determine whether you visited a museum with a friend two months ago.",
+    "original_correct": true,
+    "original_score": 1.0,
+    "question": "I mentioned visiting a museum two months ago. Did I visit with a friend or not?",
+    "question_id": "0bc8ad93"
+  }
+]

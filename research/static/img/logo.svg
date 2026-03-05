@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 304 350" fill="#F59E0B">
+  <!--
+    Engram "E" lettermark — circuit-trace style
+    6 pieces with 10px gaps and 45° diagonal cuts at step junctions
+  -->
+  <!-- Top spine + Middle bar upper (L-shape) -->
+  <!-- Bottom spine + Middle bar lower (L-shape) -->
+  <!-- Top step + Top bar (45° diagonal) -->
+  <!-- Top inner bar -->
+  <!-- Bottom inner bar -->
+  <!-- Bottom step + Bottom bar (45° diagonal) -->
+  <path d="M0 0H36V134H266V170H0Z M0 180H266V216H36V350H0Z M72 0H304V36H82V124H46V26Z M92 46H304V82H92Z M92 268H304V304H92Z M72 350H304V314H82V226H46V324Z"/>
+</svg>

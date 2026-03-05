@@ -1,0 +1,34 @@
+# GPT-4o as primary answerer (previous best: 442/500)
+# Usage: BENCHMARK_CONFIG=config/gpt4o-primary.toml cargo test ...
+
+[answerer]
+model = "gpt-4o"
+temperature = 0.0
+max_tokens = 500
+max_iterations = 20
+agentic = true
+
+[ingester]
+model = "gpt-4o-mini"
+concurrency = 100
+
+[benchmark]
+answer_concurrency = 3
+
+[[models]]
+name = "gpt-4o"
+base_url = "https://api.openai.com/v1/chat/completions"
+api_key_env = "OPENAI_API_KEY"
+max_tokens_field = "max_tokens"
+supports_temperature = true
+prompt_price_per_m = 2.50
+completion_price_per_m = 10.00
+
+[[models]]
+name = "gpt-4o-mini"
+base_url = "https://api.openai.com/v1/chat/completions"
+api_key_env = "OPENAI_API_KEY"
+max_tokens_field = "max_tokens"
+supports_temperature = true
+prompt_price_per_m = 0.15
+completion_price_per_m = 0.60

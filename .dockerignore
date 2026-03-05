@@ -1,0 +1,9 @@
+target/
+data/
+research/
+.git/
+.env
+.env.*
+*.snapshot
+models/
+epics/

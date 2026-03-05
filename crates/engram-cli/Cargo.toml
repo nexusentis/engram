@@ -1,0 +1,30 @@
+[package]
+name = "engram-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "CLI for the Engram AI agent memory system"
+
+[[bin]]
+name = "engram"
+path = "src/main.rs"
+
+[dependencies]
+engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.1.0" }
+tokio.workspace = true
+clap.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+anyhow.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+
+[dev-dependencies]
+assert_cmd = "2.0"
+predicates = "3.0"
+tempfile.workspace = true

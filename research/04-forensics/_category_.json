@@ -1,0 +1,8 @@
+{
+  "label": "Forensics",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Deep analysis of the 58 remaining failures at 88.4% accuracy."
+  }
+}

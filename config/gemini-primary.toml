@@ -1,0 +1,34 @@
+# Gemini 3.1 Pro as primary answerer (current best: 452/500)
+# Usage: BENCHMARK_CONFIG=config/gemini-primary.toml cargo test ...
+
+[answerer]
+model = "google/gemini-3.1-pro-preview"
+temperature = 0.0
+max_tokens = 500
+max_iterations = 20
+agentic = true
+
+[ingester]
+model = "gpt-4o-mini"
+concurrency = 100
+
+[benchmark]
+answer_concurrency = 7
+
+[[models]]
+name = "gpt-4o-mini"
+base_url = "https://api.openai.com/v1/chat/completions"
+api_key_env = "OPENAI_API_KEY"
+max_tokens_field = "max_tokens"
+supports_temperature = true
+prompt_price_per_m = 0.15
+completion_price_per_m = 0.60
+
+[[models]]
+name = "google/gemini-3.1-pro-preview"
+base_url = "https://aiplatform.googleapis.com/v1/projects/solance-477915/locations/global/endpoints/openapi/chat/completions"
+token_cmd_env = "GEMINI_TOKEN_CMD"
+max_tokens_field = "max_tokens"
+supports_temperature = true
+prompt_price_per_m = 2.00
+completion_price_per_m = 12.00

@@ -1,0 +1,57 @@
+# Gemini primary + GPT-5.2 fallback ensemble
+# Usage: BENCHMARK_CONFIG=config/ensemble.toml cargo test ...
+#
+# Strategy: Run Gemini first (stronger on Temporal/Updates).
+# On abstention or loop-break, fall back to GPT-5.2 (stronger on Abstention/MultiSession).
+
+[answerer]
+model = "google/gemini-3.1-pro-preview"
+temperature = 0.0
+max_tokens = 500
+max_iterations = 20
+agentic = true
+
+[ingester]
+model = "gpt-4o-mini"
+concurrency = 100
+
+[benchmark]
+answer_concurrency = 5
+
+[ensemble]
+enabled = true
+primary_model = "google/gemini-3.1-pro-preview"
+fallback_model = "gpt-5.2"
+fallback_on_abstention = true
+fallback_on_loop_break = true
+fallback_on_abs_questions = false
+# P31: trigger fallback on high-iteration Enumeration questions
+fallback_on_enum_uncertainty = true
+enum_uncertainty_min_iterations = 8
+
+[[models]]
+name = "gpt-5.2"
+base_url = "https://api.openai.com/v1/chat/completions"
+api_key_env = "OPENAI_API_KEY"
+max_tokens_field = "max_completion_tokens"
+supports_temperature = true
+prompt_price_per_m = 1.75
+completion_price_per_m = 14.00
+
+[[models]]
+name = "gpt-4o-mini"
+base_url = "https://api.openai.com/v1/chat/completions"
+api_key_env = "OPENAI_API_KEY"
+max_tokens_field = "max_tokens"
+supports_temperature = true
+prompt_price_per_m = 0.15
+completion_price_per_m = 0.60
+
+[[models]]
+name = "google/gemini-3.1-pro-preview"
+base_url = "https://aiplatform.googleapis.com/v1/projects/solance-477915/locations/global/endpoints/openapi/chat/completions"
+token_cmd_env = "GEMINI_TOKEN_CMD"
+max_tokens_field = "max_tokens"
+supports_temperature = true
+prompt_price_per_m = 2.00
+completion_price_per_m = 12.00

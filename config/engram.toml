@@ -1,0 +1,37 @@
+# Engram server configuration
+#
+# Used by engram-server (--config flag, default: config/engram.toml).
+# Environment variables override these values — see config/loader.rs.
+
+data_dir = "./data"
+
+[server]
+host = "0.0.0.0"
+port = 8080
+
+[server.security]
+# Max request body size in bytes (default: 2 MiB)
+body_limit_bytes = 2097152
+# CORS allowed origins. Empty = same-origin only. ["*"] = allow all.
+# cors_origins = ["https://app.example.com"]
+cors_origins = []
+
+[qdrant]
+mode = "external"
+url = "http://localhost:6334"
+vector_size = 1536
+
+[sqlite]
+path = "./data/engram.db"
+wal_mode = true
+busy_timeout_ms = 5000
+
+[extraction]
+mode = "api-sota"
+api_model = "gpt-4o-mini"
+confidence_threshold = 0.5
+
+[retrieval]
+rrf_k = 60
+top_k = 20
+abstention_threshold = 0.4

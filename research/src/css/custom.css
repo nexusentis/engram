@@ -1,0 +1,248 @@
+/* ==========================================================================
+   Engram Research — "Modern Technical" Design System
+   Dark-only theme with Infima variable overrides + custom tokens.
+   Two-font stack: Satoshi (display + body) + JetBrains Mono (data/code).
+   ========================================================================== */
+
+/* ---------- Self-hosted fonts ---------- */
+
+@font-face {
+  font-family: 'Satoshi';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/Satoshi-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/Satoshi-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/Satoshi-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+}
+
+/* ---------- Custom tokens ---------- */
+
+:root {
+  --engram-bg: #09090B;
+  --engram-surface: #18181B;
+  --engram-border: #27272A;
+  --engram-text: #FAFAFA;
+  --engram-muted: #A1A1AA;
+  --engram-amber: #F59E0B;
+  --engram-amber-glow: #F59E0B25;
+  --engram-violet: #A78BFA;
+  --engram-success: #4ADE80;
+  --engram-danger: #EF4444;
+  --engram-font-sans: 'Satoshi', system-ui, -apple-system, sans-serif;
+  --engram-font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* ---------- Infima dark-mode overrides ---------- */
+
+html[data-theme='dark'] {
+  --ifm-background-color: var(--engram-bg);
+  --ifm-background-surface-color: var(--engram-surface);
+  --ifm-color-primary: var(--engram-amber);
+  --ifm-color-primary-dark: #D97706;
+  --ifm-color-primary-darker: #B45309;
+  --ifm-color-primary-darkest: #92400E;
+  --ifm-color-primary-light: #FBBF24;
+  --ifm-color-primary-lighter: #FCD34D;
+  --ifm-color-primary-lightest: #FDE68A;
+  --ifm-font-color-base: var(--engram-text);
+  --ifm-font-family-base: var(--engram-font-sans);
+  --ifm-font-family-monospace: var(--engram-font-mono);
+  --ifm-heading-font-family: var(--engram-font-sans);
+  --ifm-code-font-size: 90%;
+  --ifm-navbar-background-color: var(--engram-bg);
+  --ifm-navbar-shadow: none;
+  --ifm-footer-background-color: var(--engram-bg);
+  --ifm-toc-border-color: var(--engram-border);
+  --ifm-hr-border-color: var(--engram-border);
+  --ifm-table-border-color: var(--engram-border);
+  --ifm-card-background-color: var(--engram-surface);
+  --ifm-link-color: var(--engram-violet);
+  --ifm-link-hover-color: #C4B5FD;
+  --ifm-menu-color: var(--engram-text);
+  --ifm-menu-color-active: var(--engram-amber);
+  --ifm-menu-color-background-active: var(--engram-amber-glow);
+}
+
+/* ---------- Navbar ---------- */
+
+.navbar {
+  border-bottom: 1px solid var(--engram-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.navbar__logo img {
+  height: 20px;
+  width: auto;
+  vertical-align: middle;
+  position: relative;
+  top: 1px;
+}
+
+.navbar__title {
+  font-family: var(--engram-font-sans);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--engram-text);
+}
+
+.navbar__link {
+  color: var(--engram-muted);
+  font-weight: 500;
+}
+
+.navbar__link:hover {
+  color: var(--engram-text);
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  border-top: 1px solid var(--engram-border);
+  background: var(--engram-bg);
+}
+
+.footer__copyright {
+  color: var(--engram-muted);
+  font-size: 0.85rem;
+}
+
+/* ---------- Sidebar ---------- */
+
+.menu__link--active:not(.menu__link--sublist) {
+  color: var(--engram-amber);
+}
+
+.menu__link {
+  font-size: 0.9rem;
+}
+
+.menu__list-item-collapsible > .menu__link--active {
+  color: var(--engram-amber);
+}
+
+/* ---------- Typography ---------- */
+
+h1, h2, h3 {
+  font-family: var(--engram-font-sans);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  font-size: 2.25rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+  color: var(--engram-text);
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+/* Tables: mono data font */
+table {
+  font-variant-numeric: tabular-nums;
+}
+
+table td, table th {
+  border-color: var(--engram-border);
+}
+
+/* Code blocks */
+pre {
+  background: var(--engram-surface) !important;
+  border: 1px solid var(--engram-border);
+}
+
+code {
+  font-family: var(--engram-font-mono);
+  border: 1px solid var(--engram-border);
+  background: var(--engram-surface);
+}
+
+pre code {
+  border: none;
+}
+
+/* ---------- Docs page adjustments ---------- */
+
+.markdown {
+  color: var(--engram-text);
+}
+
+.markdown a {
+  color: var(--engram-violet);
+}
+
+.markdown a:hover {
+  color: #C4B5FD;
+}
+
+.markdown strong {
+  color: var(--engram-text);
+}
+
+/* Blockquotes */
+blockquote {
+  border-left-color: var(--engram-amber);
+  background: var(--engram-surface);
+  color: var(--engram-muted);
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Scrollbar (dark) ---------- */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--engram-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--engram-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--engram-muted);
+}

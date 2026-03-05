@@ -1,0 +1,582 @@
+[
+  {
+    "question_id": "b86304ba",
+    "category": "extraction",
+    "question": "How much is the painting of a sunset worth in terms of the amount I paid for it?",
+    "expected": "The painting is worth triple what I paid for it.",
+    "generated": "I don't have enough information about the specific painting of a sunset you mentioned, including how much you paid for it. If you can provide more details or if it was discussed in a previous conversation, I can help further.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "count"
+  },
+  {
+    "question_id": "8550ddae",
+    "category": "extraction",
+    "question": "What type of cocktail recipe did I try last weekend?",
+    "expected": "lavender gin fizz",
+    "generated": "Smokey Mango Mule",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "fact_recall"
+  },
+  {
+    "question_id": "gpt4_d84a3211",
+    "category": "multi_session",
+    "question": "How much total money have I spent on bike-related expenses since the start of the year?",
+    "expected": "$185",
+    "generated": "$65",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "46a3abf7",
+    "category": "multi_session",
+    "question": "How many tanks do I currently have, including the one I set up for my friend's kid?",
+    "expected": "3",
+    "generated": "You currently have two tanks: a 20-gallon community tank named 'Amazonia' and a 1-gallon tank set up for your friend's kid.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "gpt4_2f8be40d",
+    "category": "multi_session",
+    "question": "How many weddings have I attended in this year?",
+    "expected": "I attended three weddings. The couples were Rachel and Mike, Emily and Sarah, and Jen and Tom.",
+    "generated": "4 weddings. Items: 1) Cousin Emily's wedding at a vineyard in August (session on 2023/10/15), 2) College roommate's wedding in the city with a rooftop garden ceremony (session on 2023/10/15), 3) Friend Jen's wedding at a rustic barn last weekend (session on 2023/10/15), 4) Sister's wedding where user was the maid of honor (session on 2023/10/15).",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "gpt4_7fce9456",
+    "category": "multi_session",
+    "question": "How many properties did I view before making an offer on the townhouse in the Brookside neighborhood?",
+    "expected": "I viewed four properties before making an offer on the townhouse in the Brookside neighborhood. The reasons I didn't make an offer on them were: the kitchen of the bungalow needed serious renovation, the property in Cedar Creek was out of my budget, the noise from the highway was a deal-breaker for the 1-bedroom condo, and my offer on the 2-bedroom condo was rejected due to a higher bid.",
+    "generated": "I don't have enough information to answer this question.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "gpt4_5501fe77",
+    "category": "multi_session",
+    "question": "Which social media platform did I gain the most followers on over the past month?",
+    "expected": "TikTok",
+    "generated": "Twitter, with an increase of 120 followers over the past month.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "cross_session_lookup"
+  },
+  {
+    "question_id": "7024f17c",
+    "category": "multi_session",
+    "question": "How many hours of jogging and yoga did I do last week?",
+    "expected": "0.5 hours",
+    "generated": "I don't have enough information.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "gpt4_d12ceb0e",
+    "category": "multi_session",
+    "question": "What is the average age of me, my parents, and my grandparents?",
+    "expected": "59.6",
+    "generated": "The average age of you, your parents, and your grandparents is 49.6 years. (User: 32, Mom: 55, Dad: 58, Grandma: 75, Grandpa: 78)",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "cross_session_lookup"
+  },
+  {
+    "question_id": "2788b940",
+    "category": "multi_session",
+    "question": "How many fitness classes do I attend in a typical week?",
+    "expected": "5",
+    "generated": "In a typical week, you attend four fitness classes: Zumba on Tuesdays and Thursdays, BodyPump on Mondays, and Hip Hop Abs on Saturdays.",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "d851d5ba",
+    "category": "multi_session",
+    "question": "How much money did I raise for charity in total?",
+    "expected": "$3,750",
+    "generated": "In total, you raised $8,750 for charity.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "gpt4_194be4b3",
+    "category": "multi_session",
+    "question": "How many musical instruments do I currently own?",
+    "expected": "I currently own 4 musical instruments. I've had the Fender Stratocaster electric guitar for 5 years, the Yamaha FG800 acoustic guitar for 8 years, the 5-piece Pearl Export drum set for an unspecified amount of time, and the Korg B1 piano for 3 years.",
+    "generated": "I don't have enough information to determine the exact number of musical instruments you currently own. While I found mentions of specific instruments like your black Fender Stratocaster electric guitar, Yamaha FG800 acoustic guitar, Korg B1 piano, and an old drum set, there is no comprehensive or recent list of all the instruments you own. If you have a specific list or update, please let me know!",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "2ce6a0f2",
+    "category": "multi_session",
+    "question": "How many different art-related events did I attend in the past month?",
+    "expected": "4",
+    "generated": "3 art-related events. Items: 1) \"Women in Art\" exhibition on February 10th (from session on 2023/03/08), 2) \"Art Afternoon\" at the Children's Museum on February 17th (from session on 2023/03/08), 3) Lecture on 'The Evolution of Street Art' on March 3rd (from session on 2023/03/08).",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "10d9b85a",
+    "category": "multi_session",
+    "question": "How many days did I spend attending workshops, lectures, and conferences in April?",
+    "expected": "3 days",
+    "generated": "2 days. Items: 1) Workshop on standardization and normalization (April 17-18, session_5650), 2) Lecture on sustainable development (April 10, session_5640).",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "gpt4_372c3eed_abs",
+    "category": "abstention",
+    "question": "How many years in total did I spend in formal education from high school to the completion of my Master's degree?",
+    "expected": "The information provided is not enough. You mentioned 4 years in high school (2010-2014), 2 years at PCC (2014-2016), and 4 years at UCLA (2016-2020). But you didn't mention the number of years you spend getting the Master's degree",
+    "generated": "8 years. Items: 1) High School (2010-2014) (from session on 2023/08/20), 2) Associate's degree (2014-2016) (from session on 2023/08/20), 3) Bachelor's degree (2016-2020) (from session on 2023/08/20)",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "false_positive",
+    "subtype": "should_abstain"
+  },
+  {
+    "question_id": "0edc2aef",
+    "category": "extraction",
+    "question": "Can you suggest a hotel for my upcoming trip to Miami?",
+    "expected": "The user would prefer suggestions of hotels in Miami that offer great views, possibly of the ocean or the city skyline, and have unique features such as a rooftop pool or a hot tub on the balcony. They may not prefer suggestions of basic or budget hotels without these features.",
+    "generated": "I don't have enough information to suggest a hotel for your upcoming trip to Miami. If you have specific preferences or requirements for your stay, feel free to share them, and I can help you find a hotel that suits your needs.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "preference_recall"
+  },
+  {
+    "question_id": "35a27287",
+    "category": "extraction",
+    "question": "Can you recommend some interesting cultural events happening around me this weekend?",
+    "expected": "The user would prefer responses that suggest cultural events where they can practice their language skills, particularly Spanish and French. They would also appreciate if the event has a focus on language learning resources. They would not prefer events that do not provide opportunities for language practice or cultural exchange.",
+    "generated": "This weekend in Belo Horizonte, you can explore the Feira de Arte e Artesanato de Belo Horizonte, an outdoor market in the Afonso Pena neighborhood featuring local artists and artisans. Additionally, the Centro Cultural Lagoa do Nado offers exhibitions and events in a scenic park setting. For a lively atmosphere, visit the trendy Santa Teresa neighborhood, known for its street art, live music, and food vendors at Pra\u00e7a Duque de Caxias.",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "preference_recall"
+  },
+  {
+    "question_id": "09d032c9",
+    "category": "extraction",
+    "question": "I've been having trouble with the battery life on my phone lately. Any tips?",
+    "expected": "The user would prefer responses that build upon their previous mention of purchasing a portable power bank, such as suggestions on how to optimize its use, like ensuring it's fully charged before use. They might also appreciate tips on utilizing battery-saving features on their phone. The user may not prefer responses that suggest alternative solutions or unrelated advice.",
+    "generated": "I don't have enough information about your specific phone battery issues. However, here are some general tips that might help improve your phone's battery life:\n\n1. **Reduce Screen Brightness**: Lowering your screen brightness or setting it to auto can help conserve battery.\n\n2. **Limit Background App Activity**: Close apps running in the background and disable background app refresh for apps that don't need it.\n\n3. **Use Battery Saver Mode**: Most smartphones have a battery saver mode that limits background activity and reduces performance to extend battery life.\n\n4. **Disable Unnecessary Notifications**: Turn off notifications for apps that aren't essential to reduce battery drain.\n\n5. **Update Apps and Software**: Ensure your apps and phone software are up to date, as updates often include battery optimization improvements.\n\n6. **Turn Off Location Services**: Disable location services for apps that don't need it, or set them to use location only while the app is in use.\n\n7. **Use Wi-Fi Instead of Cellular Data**: When possible, use Wi-Fi instead of cellular data, as it generally consumes less battery.\n\nIf you have specific concerns or need more personalized advice, feel free to share more details about your phone model or usage habits.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "preference_recall"
+  },
+  {
+    "question_id": "d24813b1",
+    "category": "extraction",
+    "question": "I'm thinking of inviting my colleagues over for a small gathering. Any tips on what to bake?",
+    "expected": "The user would prefer baking suggestions that take into account their previous success with the lemon poppyseed cake, such as variations of that recipe or other desserts that share similar qualities. They might prefer suggestions that balance impressiveness with manageability, considering their previous experience. The user may not prefer overly complex or unfamiliar recipes, or suggestions that do not build upon their existing baking experience.",
+    "generated": "Since you've been experimenting with baking cookies and trying out different flavors, you might enjoy baking some oatmeal raisin cookies with nuts for your gathering. This classic combination is not only delicious but also allows for some healthy variations. You could try using almond flour or coconut oil to make them healthier, as you've been interested in experimenting with different ingredients. Additionally, considering your interest in healthier options, you might want to explore adding some dried cranberries or dark chocolate chips for a twist. Enjoy your baking and the gathering!",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "preference_recall"
+  },
+  {
+    "question_id": "0a34ad58",
+    "category": "extraction",
+    "question": "I\u2019m a bit anxious about getting around Tokyo. Do you have any helpful tips?",
+    "expected": "The user would prefer responses that utilize their existing resources, such as their Suica card and TripIt app, to provide personalized tips for navigating Tokyo's public transportation. They might not prefer general tips or recommendations that do not take into account their prior preparations.",
+    "generated": "Here are some tips for getting around Tokyo:\n\n1. **Use a Suica Card:** It's a prepaid IC card that makes traveling on public transportation convenient and cost-effective. You can use it on trains, buses, and even some taxis.\n\n2. **Plan Your Routes:** Use transit apps or Google Maps to find the best routes. Tokyo's public transportation is extensive, so planning ahead can save time.\n\n3. **Visit Early or Late:** For popular attractions like Tokyo Tower, visit early in the morning or later in the evening to avoid crowds.\n\n4. **Comfortable Clothing:** Wear comfortable shoes and dress in layers, as you'll be doing a lot of walking and the weather can vary.\n\n5. **Currency Exchange:** Exchange money at convenient locations like Travelex or Seven Bank in Shinjuku. ATMs at 7-Eleven also accept international cards.\n\n6. **Ask for Help:** Don't hesitate to ask station staff or locals for assistance if you're unsure about directions or fares.\n\nEnjoy your time in Tokyo!",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "preference_recall"
+  },
+  {
+    "question_id": "9aaed6a3",
+    "category": "multi_session",
+    "question": "How much cashback did I earn at SaveMart last Thursday?",
+    "expected": "$0.75",
+    "generated": "I don't have enough information to determine how much cashback you earned at SaveMart last Thursday.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "51c32626",
+    "category": "multi_session",
+    "question": "When did I submit my research paper on sentiment analysis?",
+    "expected": "February 1st",
+    "generated": "2023/05/22",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "cross_session_lookup"
+  },
+  {
+    "question_id": "9ee3ecd6",
+    "category": "multi_session",
+    "question": "How many points do I need to earn to redeem a free skincare product at Sephora?",
+    "expected": "100",
+    "generated": "You need 300 points to redeem a free skincare product at Sephora.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "60159905",
+    "category": "multi_session",
+    "question": "How many dinner parties have I attended in the past month?",
+    "expected": "three",
+    "generated": "2 dinner parties. Items: 1) Potluck dinner party at Alex's place (from session on 2023/05/21), 2) Italian feast at Sarah's place (from session on 2023/05/22).",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "aggregation"
+  },
+  {
+    "question_id": "8cf4d046",
+    "category": "multi_session",
+    "question": "What is the average GPA of my undergraduate and graduate studies?",
+    "expected": "3.83",
+    "generated": "The average GPA of your undergraduate studies is 3.86, and your graduate studies is 3.8.",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "cross_session_lookup"
+  },
+  {
+    "question_id": "37f165cf",
+    "category": "multi_session",
+    "question": "What was the page count of the two novels I finished in January and March?",
+    "expected": "856",
+    "generated": "I don't have enough information to determine the page count of the two novels you finished in January and March.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "cross_session_lookup"
+  },
+  {
+    "question_id": "a96c20ee_abs",
+    "category": "abstention",
+    "question": "At which university did I present a poster for my undergrad course research project?",
+    "expected": "The information provided is not enough. You did not mention presenting a poster for your undergrad course research project.",
+    "generated": "Harvard University",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "false_positive",
+    "subtype": "should_abstain"
+  },
+  {
+    "question_id": "09ba9854_abs",
+    "category": "abstention",
+    "question": "How much will I save by taking the bus from the airport to my hotel instead of a taxi?",
+    "expected": "The information provided is not enough. You did not mention how much will the bus take.",
+    "generated": "Taking the bus from the airport to your hotel will save you approximately $40 compared to taking a taxi. The bus fare is around $20, while the taxi fare is around $60.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_positive",
+    "subtype": "should_abstain"
+  },
+  {
+    "question_id": "0bc8ad92",
+    "category": "temporal",
+    "question": "How many months have passed since I last visited a museum with a friend?",
+    "expected": "5",
+    "generated": "3 months",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "date_diff"
+  },
+  {
+    "question_id": "gpt4_7f6b06db",
+    "category": "temporal",
+    "question": "What is the order of the three trips I took in the past three months, from earliest to latest?",
+    "expected": "I went on a day hike to Muir Woods National Monument with my family, then I went on a road trip with friends to Big Sur and Monterey, and finally I started my solo camping trip to Yosemite National Park.",
+    "generated": "1. Road trip to Big Sur and Monterey (April 20, 2023)\n2. Trip to Dubai (April 22, 2023)\n3. Solo camping trip to Yosemite National Park (May 15, 2023)",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "ordering"
+  },
+  {
+    "question_id": "gpt4_a1b77f9c",
+    "category": "temporal",
+    "question": "How many weeks in total do I spent on reading 'The Nightingale' and listening to 'Sapiens: A Brief History of Humankind' and 'The Power'?",
+    "expected": "2 weeks for 'The Nightingale', 4 weeks for 'Sapiens: A Brief History of Humankind', and 2 weeks for 'The Power', so a total of 8 weeks.",
+    "generated": "8 weeks in total: 1) 'The Nightingale' (from session on 2022/01/01 to 2022/01/15), 2) 'Sapiens: A Brief History of Humankind' (from session on 2022/02/01 to 2022/03/01), 3) 'The Power' (from session on 2022/03/06 to 2022/03/20).",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "date_diff"
+  },
+  {
+    "question_id": "370a8ff4",
+    "category": "temporal",
+    "question": "How many weeks had passed since I recovered from the flu when I went on my 10th jog outdoors?",
+    "expected": "15",
+    "generated": "11 weeks had passed since you recovered from the flu when you went on your 10th jog outdoors.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "date_diff"
+  },
+  {
+    "question_id": "gpt4_d6585ce8",
+    "category": "temporal",
+    "question": "What is the order of the concerts and musical events I attended in the past two months, starting from the earliest?",
+    "expected": "The order of the concerts I attended is: 1. Billie Eilish concert at the Wells Fargo Center in Philly, 2. Free outdoor concert series in the park, 3. Music festival in Brooklyn, 4. Jazz night at a local bar, 5. Queen + Adam Lambert concert at the Prudential Center in Newark, NJ.",
+    "generated": "1. March 18, 2023: Billie Eilish concert in Philly\n2. March 25, 2023: Free outdoor concert series in the park\n3. April 1, 2023: Music festival in Brooklyn\n4. April 8, 2023: Jazz night at a local bar",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "ordering"
+  },
+  {
+    "question_id": "gpt4_f420262c",
+    "category": "temporal",
+    "question": "What is the order of airlines I flew with from earliest to latest before today?",
+    "expected": "JetBlue, Delta, United, American Airlines",
+    "generated": "1. JetBlue (San Francisco to Boston) - November 17, 2022\n2. American Airlines (New York to Los Angeles) - February 10, 2023\n3. JetBlue (Boston to Fort Lauderdale) - February 14, 2023",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "ordering"
+  },
+  {
+    "question_id": "gpt4_7bc6cf22",
+    "category": "temporal",
+    "question": "How many days ago did I read the March 15th issue of The New Yorker?",
+    "expected": "12 days ago. 13 days (including the last day) is also acceptable.",
+    "generated": "5 days ago",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "date_diff"
+  },
+  {
+    "question_id": "eac54adc",
+    "category": "temporal",
+    "question": "How many days ago did I launch my website when I signed a contract with my first client?",
+    "expected": "19 days ago. 20 days (including the last day) is also acceptable.",
+    "generated": "I don't have enough information to answer this question.",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "date_diff"
+  },
+  {
+    "question_id": "gpt4_59149c78",
+    "category": "temporal",
+    "question": "I mentioned that I participated in an art-related event two weeks ago. Where was that event held at?",
+    "expected": "The Metropolitan Museum of Art.",
+    "generated": "I don't have enough information to determine where the art-related event you participated in two weeks ago was held.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "time_anchored_lookup"
+  },
+  {
+    "question_id": "gpt4_d6585ce9",
+    "category": "temporal",
+    "question": "Who did I go with to the music event last Saturday?",
+    "expected": "my parents",
+    "generated": "I don't have enough information to determine who you went with to the music event last Saturday.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "time_anchored_lookup"
+  },
+  {
+    "question_id": "gpt4_e414231f",
+    "category": "temporal",
+    "question": "Which bike did I fixed or serviced the past weekend?",
+    "expected": "road bike",
+    "generated": "I don't have enough information.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "time_anchored_lookup"
+  },
+  {
+    "question_id": "gpt4_4929293b",
+    "category": "temporal",
+    "question": "What was the the life event of one of my relatives that I participated in a week ago?",
+    "expected": "my cousin's wedding",
+    "generated": "I participated in my niece's kindergarten graduation ceremony on June 10th.",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "other_temporal"
+  },
+  {
+    "question_id": "9a707b82",
+    "category": "temporal",
+    "question": "I mentioned cooking something for my friend a couple of days ago. What was it?",
+    "expected": "a chocolate cake",
+    "generated": "I don't have enough information to determine what you cooked for your friend a couple of days ago.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "time_anchored_lookup"
+  },
+  {
+    "question_id": "a3838d2b",
+    "category": "temporal",
+    "question": "How many charity events did I participate in before the 'Run for the Cure' event?",
+    "expected": "4",
+    "generated": "You participated in three charity events before the 'Run for the Cure': 'Dance for a Cause' on May 1st, 'Walk for Wildlife' in June, and 'Food for Thought' on September 25th.",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "count"
+  },
+  {
+    "question_id": "gpt4_483dd43c",
+    "category": "temporal",
+    "question": "Which show did I start watching first, 'The Crown' or 'Game of Thrones'?",
+    "expected": "'Game of Thrones'",
+    "generated": "You started watching 'The Crown' first.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "other_temporal"
+  },
+  {
+    "question_id": "6e984302",
+    "category": "temporal",
+    "question": "I mentioned an investment for a competition four weeks ago? What did I buy?",
+    "expected": "I got my own set of sculpting tools.",
+    "generated": "I don't have enough information to answer this question.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "time_anchored_lookup"
+  },
+  {
+    "question_id": "gpt4_cd90e484",
+    "category": "temporal",
+    "question": "How long did I use my new binoculars before I saw the American goldfinches returning to the area?",
+    "expected": "Two weeks",
+    "generated": "21 days",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "date_diff"
+  },
+  {
+    "question_id": "6a1eabeb",
+    "category": "updates",
+    "question": "What was my personal best time in the charity 5K run?",
+    "expected": "25 minutes and 50 seconds (or 25:50)",
+    "generated": "27:12",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "update_lookup"
+  },
+  {
+    "question_id": "830ce83f",
+    "category": "updates",
+    "question": "Where did Rachel move to after her recent relocation?",
+    "expected": "the suburbs",
+    "generated": "Chicago",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "update_lookup"
+  },
+  {
+    "question_id": "852ce960",
+    "category": "updates",
+    "question": "What was the amount I was pre-approved for when I got my mortgage from Wells Fargo?",
+    "expected": "$400,000",
+    "generated": "$350,000",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "update_lookup"
+  },
+  {
+    "question_id": "9ea5eabc",
+    "category": "updates",
+    "question": "Where did I go on my most recent family trip?",
+    "expected": "Paris",
+    "generated": "Hawaii",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "update_lookup"
+  },
+  {
+    "question_id": "7a87bd0c",
+    "category": "updates",
+    "question": "How long have I been sticking to my daily tidying routine?",
+    "expected": "4 weeks",
+    "generated": "I don't have enough information to answer this question.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "update_lookup"
+  },
+  {
+    "question_id": "69fee5aa",
+    "category": "updates",
+    "question": "How many pre-1920 American coins do I have in my collection?",
+    "expected": "38",
+    "generated": "37",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "update_count"
+  },
+  {
+    "question_id": "ba61f0b9",
+    "category": "updates",
+    "question": "How many women are on the team led by my former manager Rachel?",
+    "expected": "6",
+    "generated": "5 women. Items: 1) Sarah, Project Manager (from session on 2023/01/18), 2) Emily, Software Developer (from session on 2023/01/18), 3) Maya, Data Analyst (from session on 2023/01/18), 4) Sofia, Marketing Specialist (from session on 2023/01/18), 5) Leila, UX Designer (from session on 2023/01/18).",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "update_count"
+  },
+  {
+    "question_id": "f685340e_abs",
+    "category": "abstention",
+    "question": "How often do I play table tennis with my friends at the local park?",
+    "expected": "The information provided is not enough. You mentioned playing tennis but not table tennis.",
+    "generated": "Every other week.",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "false_positive",
+    "subtype": "should_abstain"
+  },
+  {
+    "question_id": "031748ae_abs",
+    "category": "abstention",
+    "question": "How many engineers do I lead when I just started my new role as Software Engineer Manager?",
+    "expected": "The information provided is not enough. You mentioned starting the role as Senior Software Engineer but not Software Engineer Manager.",
+    "generated": "5 engineers. Items: 1) User leads a team of 4 engineers in their new role as Senior Software Engineer (from session on 2023/05/25), 2) User leads a team of five engineers (from session on 2023/05/27).",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_positive",
+    "subtype": "should_abstain"
+  },
+  {
+    "question_id": "07741c45",
+    "category": "updates",
+    "question": "Where do I currently keep my old sneakers?",
+    "expected": "in a shoe rack in my closet",
+    "generated": "You are looking forward to storing your old sneakers in a shoe rack.",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "latest_value"
+  },
+  {
+    "question_id": "561fabcd",
+    "category": "extraction",
+    "question": "I was thinking back to our previous conversation about the Radiation Amplified zombie, and I was wondering if you remembered what we finally decided to name it?",
+    "expected": "Fissionator.",
+    "generated": "Contaminated Colossus",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "fact_recall"
+  },
+  {
+    "question_id": "eaca4986",
+    "category": "extraction",
+    "question": "I'm looking back at our previous conversation where you created two sad songs for me. Can you remind me what was the chord progression for the chorus in the second song?",
+    "expected": "C D E F G A B A G F E D C",
+    "generated": "I don't have enough information to provide the chord progression for the chorus in the second sad song.",
+    "v10_status": "FAIL\u2192FAIL",
+    "mode": "false_abstention",
+    "subtype": "fact_recall"
+  },
+  {
+    "question_id": "16c90bf4",
+    "category": "extraction",
+    "question": "I'm looking back at our previous conversation about the Seco de Cordero recipe from Ancash. You mentioned using a light or medium-bodied beer, but I was wondering if you could remind me what type of beer you specifically recommended?",
+    "expected": "I recommended using a Pilsner or Lager for the recipe.",
+    "generated": "You mentioned that you would try the Seco de Cordero recipe with a Pilsner. Additionally, you expressed a love for craft beer and were interested in checking out breweries in Napa Valley, such as Napa Smith Brewery and Calistoga Inn Restaurant & Brewery.",
+    "v10_status": "PASS\u2192FAIL",
+    "mode": "wrong_answer",
+    "subtype": "preference_recall"
+  }
+]

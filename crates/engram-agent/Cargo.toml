@@ -1,0 +1,19 @@
+[package]
+name = "engram-agent"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Reusable LLM agent loop with tool-calling and lifecycle hooks"
+
+[dependencies]
+engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.1.0", default-features = false }
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["time"] }
+tracing.workspace = true
+thiserror.workspace = true

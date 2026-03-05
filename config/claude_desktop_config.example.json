@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "engram": {
+      "command": "path/to/engram-server",
+      "args": ["--mode", "mcp"],
+      "env": {
+        "OPENAI_API_KEY": "sk-...",
+        "ENGRAM_QDRANT_URL": "http://localhost:6334"
+      }
+    }
+  }
+}
