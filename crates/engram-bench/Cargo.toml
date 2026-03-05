@@ -7,8 +7,8 @@ description = "Benchmark harness for Engram memory system (LongMemEval-S)"
 publish = false
 
 [dependencies]
-engram = { package = "engram-ai", path = "../engram-ai", version = "0.1.0", features = ["graph", "metrics"] }
-engram-agent = { path = "../engram-agent", version = "0.1.0" }
+engram = { package = "engram-ai", path = "../engram-ai", version = "0.1.1", features = ["graph", "metrics"] }
+engram-agent = { path = "../engram-agent", version = "0.1.1" }
 
 tokio.workspace = true
 futures.workspace = true

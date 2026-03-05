@@ -1463,7 +1463,7 @@ checksum = "c34f04666d835ff5d62e058c3995147c06f42fe86ff053337632bca83e42702d"
 
 [[package]]
 name = "engram-agent"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
  "engram-ai-core",
@@ -1476,7 +1476,7 @@ dependencies = [
 
 [[package]]
 name = "engram-ai"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "engram-ai-core",
  "tempfile",
@@ -1486,7 +1486,7 @@ dependencies = [
 
 [[package]]
 name = "engram-ai-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1516,7 +1516,7 @@ dependencies = [
 
 [[package]]
 name = "engram-bench"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1543,7 +1543,7 @@ dependencies = [
 
 [[package]]
 name = "engram-cli"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -1561,7 +1561,7 @@ dependencies = [
 
 [[package]]
 name = "engram-server"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "async-trait",
