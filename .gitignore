@@ -4,6 +4,9 @@
 # Playwright MCP server state
 .playwright-mcp/
 
+# Codex CLI config
+.codex/
+
 # Environment variables
 .env
 .env.local
