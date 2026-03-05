@@ -75,7 +75,7 @@ curl http://localhost:8080/health
 ```
 
 ```json
-{"status": "healthy", "qdrant": true, "sqlite": true, "version": "0.1.0"}
+{"status": "healthy", "qdrant": true, "version": "0.1.1"}
 ```
 
 ## 6. Ingest a conversation

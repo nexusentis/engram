@@ -332,19 +332,17 @@ Health check. No authentication required.
 {
   "status": "healthy",
   "qdrant": true,
-  "sqlite": true,
-  "version": "0.1.0"
+  "version": "0.1.1"
 }
 ```
 
-Returns 503 if Qdrant or SQLite is unreachable:
+Returns 503 if Qdrant is unreachable:
 
 ```json
 {
   "status": "degraded",
   "qdrant": false,
-  "sqlite": true,
-  "version": "0.1.0"
+  "version": "0.1.1"
 }
 ```
 
