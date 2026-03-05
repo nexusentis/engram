@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use engram_core::config::Config;
-use engram_core::storage::{Database, QdrantStorage, AuditLog};
+use engram_core::storage::QdrantStorage;
 
 #[derive(Parser)]
 #[command(name = "engram")]
@@ -25,7 +25,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Initialize the memory system (create directories, collections, database)
+    /// Initialize the memory system (create directories, collections)
     Init {
         /// Path to data directory
         #[arg(short, long)]
@@ -100,7 +100,6 @@ async fn cmd_init(
     if let Some(dir) = data_dir {
         config.data_dir = dir.clone();
         config.qdrant.path = Some(format!("{}/qdrant", dir));
-        config.sqlite.path = format!("{}/engram.db", dir);
     }
 
     let data_path = PathBuf::from(&config.data_dir);
@@ -127,12 +126,6 @@ async fn cmd_init(
     qdrant.initialize().await
         .context("Failed to initialize Qdrant collections")?;
     println!("  \x1b[32m✓\x1b[0m Created 4 collections (world, experience, opinion, observation)");
-
-    // Initialize SQLite
-    println!("  \x1b[34m>\x1b[0m Initializing SQLite database...");
-    let _db = Database::open(&config.sqlite)
-        .context("Failed to open SQLite database")?;
-    println!("  \x1b[32m✓\x1b[0m Created database with audit log, sessions, entities tables");
 
     // Save configuration
     config.save(config_path)
@@ -163,20 +156,6 @@ async fn cmd_status(config: &Config, format: &str) -> Result<()> {
         }
     }
 
-    // Check SQLite
-    match Database::open(&config.sqlite) {
-        Ok(db) => {
-            status.sqlite_connected = true;
-            let audit = AuditLog::new(&db);
-            if let Ok(stats) = audit.get_stats() {
-                status.audit_stats = Some(stats);
-            }
-        }
-        Err(e) => {
-            status.sqlite_error = Some(e.to_string());
-        }
-    }
-
     match format {
         "json" => {
             println!("{}", serde_json::to_string_pretty(&status)?);
@@ -203,25 +182,6 @@ fn print_status_text(status: &SystemStatus) {
     } else {
         println!("\x1b[31m●\x1b[0m Qdrant: Disconnected");
         if let Some(err) = &status.qdrant_error {
-            println!("  Error: {}", err);
-        }
-    }
-
-    println!();
-
-    // SQLite status
-    if status.sqlite_connected {
-        println!("\x1b[32m●\x1b[0m SQLite: Connected");
-        if let Some((creates, updates, deletes, searches)) = status.audit_stats {
-            println!("  Audit log:");
-            println!("    - Creates: {}", creates);
-            println!("    - Updates: {}", updates);
-            println!("    - Deletes: {}", deletes);
-            println!("    - Searches: {}", searches);
-        }
-    } else {
-        println!("\x1b[31m●\x1b[0m SQLite: Disconnected");
-        if let Some(err) = &status.sqlite_error {
             println!("  Error: {}", err);
         }
     }
@@ -266,7 +226,7 @@ fn cmd_config(
             println!("\nAvailable keys:");
             println!("  data_dir, server.host, server.port, qdrant.mode,");
             println!("  extraction.mode, extraction.confidence_threshold,");
-            println!("  retrieval.reranking, retrieval.top_k");
+            println!("  retrieval.top_k");
         }
     }
 
@@ -279,7 +239,4 @@ struct SystemStatus {
     qdrant_error: Option<String>,
     collection_counts: Vec<(String, u64)>,
     total_memories: u64,
-    sqlite_connected: bool,
-    sqlite_error: Option<String>,
-    audit_stats: Option<(i64, i64, i64, i64)>,
 }

@@ -2,10 +2,10 @@
 //!
 //! Run with: OPENAI_API_KEY=... cargo test --test integration_qdrant -- --ignored
 
-use engram_core::embedding::{EmbeddingProvider, RemoteEmbeddingProvider, EMBEDDING_DIMENSION};
-use engram_core::storage::{QdrantConfig, QdrantStorage};
-use engram_core::types::EpistemicType;
-use engram_core::types::Memory;
+use engram_ai_core::embedding::{EmbeddingProvider, RemoteEmbeddingProvider, EMBEDDING_DIMENSION};
+use engram_ai_core::storage::{QdrantConfig, QdrantStorage};
+use engram_ai_core::types::EpistemicType;
+use engram_ai_core::types::Memory;
 use uuid::Uuid;
 
 fn create_qdrant_config() -> QdrantConfig {

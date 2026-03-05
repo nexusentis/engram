@@ -21,7 +21,6 @@ futures.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 qdrant-client.workspace = true
-rusqlite.workspace = true
 reqwest.workspace = true
 chrono.workspace = true
 uuid.workspace = true

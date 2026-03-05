@@ -39,7 +39,7 @@ pub use llm::{HttpLlmClient, LlmClient, LlmClientConfig, ModelProfile, ModelRegi
 pub use retrieval::{AbstentionConfig, ConfidenceScorer, QueryAnalyzer, RerankedResult};
 
 // Storage
-pub use storage::{Database, QdrantConfig, QdrantStorage, SessionStore, SqliteConfig};
+pub use storage::{QdrantConfig, QdrantStorage};
 
 // Memory system facade
 pub use memory_system::{MemorySystem, MemorySystemBuilder};

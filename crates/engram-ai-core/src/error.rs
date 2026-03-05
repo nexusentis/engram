@@ -34,9 +34,6 @@ pub enum StorageError {
     #[error("Qdrant error: {0}")]
     Qdrant(String),
 
-    #[error("SQLite error: {0}")]
-    Sqlite(#[from] rusqlite::Error),
-
     #[error("Collection not found: {0}")]
     CollectionNotFound(String),
 

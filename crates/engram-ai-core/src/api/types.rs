@@ -283,8 +283,6 @@ pub struct HealthResponse {
     pub status: String,
     /// Qdrant connection status
     pub qdrant: bool,
-    /// SQLite connection status
-    pub sqlite: bool,
     /// API version
     pub version: String,
 }
@@ -295,17 +293,15 @@ impl HealthResponse {
         Self {
             status: "healthy".to_string(),
             qdrant: true,
-            sqlite: true,
             version: env!("CARGO_PKG_VERSION").to_string(),
         }
     }
 
     /// Create a degraded response
-    pub fn degraded(qdrant: bool, sqlite: bool) -> Self {
+    pub fn degraded(qdrant: bool) -> Self {
         Self {
             status: "degraded".to_string(),
             qdrant,
-            sqlite,
             version: env!("CARGO_PKG_VERSION").to_string(),
         }
     }
@@ -444,12 +440,10 @@ mod tests {
         let healthy = HealthResponse::healthy();
         assert_eq!(healthy.status, "healthy");
         assert!(healthy.qdrant);
-        assert!(healthy.sqlite);
 
-        let degraded = HealthResponse::degraded(true, false);
+        let degraded = HealthResponse::degraded(false);
         assert_eq!(degraded.status, "degraded");
-        assert!(degraded.qdrant);
-        assert!(!degraded.sqlite);
+        assert!(!degraded.qdrant);
     }
 
     #[test]

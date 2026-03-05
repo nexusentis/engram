@@ -17,7 +17,7 @@ use serde_json::json;
 use engram_core::api::AuthConfig;
 use engram_core::config::SecurityConfig;
 use engram_core::extraction::{ApiExtractor, ApiExtractorConfig};
-use engram_core::storage::{Database, QdrantStorage, SqliteConfig};
+use engram_core::storage::QdrantStorage;
 use engram_core::{EmbeddingProvider, MemorySystem};
 
 use engram_server::state::AppState;
@@ -39,7 +39,7 @@ macro_rules! require_qdrant {
     };
 }
 
-/// Build an AppState backed by real Qdrant + MockEmbedder + in-memory SQLite.
+/// Build an AppState backed by real Qdrant + MockEmbedder.
 async fn live_app_state(qdrant_url: &str) -> AppState {
     let qdrant_config = engram_core::QdrantConfig::external(qdrant_url);
     let qdrant = Arc::new(
@@ -56,22 +56,12 @@ async fn live_app_state(qdrant_url: &str) -> AppState {
     };
     let extractor = Arc::new(ApiExtractor::new(extractor_config));
 
-    let db_config = SqliteConfig {
-        path: ":memory:".to_string(),
-        wal_mode: false,
-        busy_timeout_ms: 5000,
-    };
-    let database = Arc::new(std::sync::Mutex::new(
-        Database::open(&db_config).expect("in-memory SQLite"),
-    ));
-
     let memory_system = MemorySystem::new(qdrant.clone(), embedder.clone(), extractor.clone());
 
     AppState {
         qdrant,
         embedder,
         extractor,
-        database,
         auth_config: AuthConfig::disabled(),
         security: SecurityConfig::default(),
         mcp_backend: Arc::new(memory_system),

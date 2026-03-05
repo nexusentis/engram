@@ -8,7 +8,7 @@ use engram_core::api::mcp::McpHandler;
 use engram_core::api::AuthConfig;
 use engram_core::config::SecurityConfig;
 use engram_core::extraction::{ApiExtractor, ApiExtractorConfig};
-use engram_core::storage::{Database, QdrantStorage};
+use engram_core::storage::QdrantStorage;
 use engram_core::{Config, EmbeddingProvider, MemorySystem, RemoteEmbeddingProvider};
 
 /// An MCP session: handler + last-active timestamp for TTL reaping.
@@ -26,7 +26,6 @@ pub struct AppState {
     pub qdrant: Arc<QdrantStorage>,
     pub embedder: Arc<dyn EmbeddingProvider>,
     pub extractor: Arc<ApiExtractor>,
-    pub database: Arc<std::sync::Mutex<Database>>,
     pub auth_config: AuthConfig,
     pub security: SecurityConfig,
     /// Backend for MCP HTTP sessions (reuses same Qdrant/embedder/extractor).
@@ -76,10 +75,6 @@ impl AppState {
         let extractor_config = ApiExtractorConfig::openai(&model).with_api_key(api_key);
         let extractor = Arc::new(ApiExtractor::new(extractor_config));
 
-        // SQLite
-        let database = Database::open(&config.sqlite)?;
-        let database = Arc::new(std::sync::Mutex::new(database));
-
         // MemorySystem for MCP handler backend (shares Qdrant/embedder/extractor)
         let mcp_backend = Arc::new(MemorySystem::new(
             qdrant.clone(),
@@ -91,7 +86,6 @@ impl AppState {
             qdrant,
             embedder,
             extractor,
-            database,
             auth_config,
             security,
             mcp_backend,

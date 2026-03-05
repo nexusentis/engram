@@ -2,13 +2,12 @@ use serde::{Deserialize, Serialize};
 use std::path::Path;
 
 use crate::error::ConfigError;
-use crate::storage::{QdrantConfig, SqliteConfig};
+use crate::storage::QdrantConfig;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
     pub data_dir: String,
     pub qdrant: QdrantConfig,
-    pub sqlite: SqliteConfig,
     pub server: ServerConfig,
     pub extraction: ExtractionConfig,
     pub retrieval: RetrievalConfig,
@@ -104,7 +103,6 @@ impl Default for Config {
         Self {
             data_dir: "./data".to_string(),
             qdrant: QdrantConfig::default(),
-            sqlite: SqliteConfig::default(),
             server: ServerConfig {
                 host: "0.0.0.0".to_string(),
                 port: 8080,

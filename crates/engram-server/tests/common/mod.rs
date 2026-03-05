@@ -12,7 +12,7 @@ use tower::ServiceExt;
 use engram_core::api::AuthConfig;
 use engram_core::config::SecurityConfig;
 use engram_core::extraction::{ApiExtractor, ApiExtractorConfig};
-use engram_core::storage::{Database, QdrantConfig, QdrantStorage, SqliteConfig};
+use engram_core::storage::{QdrantConfig, QdrantStorage};
 use engram_core::{EmbeddingProvider, MemorySystem};
 
 use engram_server::state::{AppState, McpSession};
@@ -71,22 +71,12 @@ pub fn dummy_app_state_with_auth(auth_config: AuthConfig) -> AppState {
     };
     let extractor = Arc::new(ApiExtractor::new(extractor_config));
 
-    let db_config = SqliteConfig {
-        path: ":memory:".to_string(),
-        wal_mode: false,
-        busy_timeout_ms: 5000,
-    };
-    let database = Arc::new(std::sync::Mutex::new(
-        Database::open(&db_config).expect("in-memory SQLite should open"),
-    ));
-
     let memory_system = MemorySystem::new(qdrant.clone(), embedder.clone(), extractor.clone());
 
     AppState {
         qdrant,
         embedder,
         extractor,
-        database,
         auth_config,
         security: SecurityConfig::default(),
         mcp_backend: Arc::new(memory_system),

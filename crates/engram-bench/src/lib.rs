@@ -6,10 +6,8 @@
 
 pub mod error;
 pub mod longmemeval;
-mod storage;
 mod types;
 
-pub use storage::{BenchmarkRunSummary, CategoryDiff, ResultStorage, RunComparison};
 pub use types::{
     BenchmarkConfig, BenchmarkMessage, BenchmarkQuestion, BenchmarkResult, BenchmarkSession,
     CategoryScore, QuestionCategory, QuestionResult, RetrievedMemoryInfo,

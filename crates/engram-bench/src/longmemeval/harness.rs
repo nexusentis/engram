@@ -7,7 +7,6 @@ use std::time::Instant;
 use chrono::{DateTime, NaiveDateTime, Utc};
 use uuid::Uuid;
 
-use crate::storage::ResultStorage;
 use crate::types::{
     BenchmarkConfig, BenchmarkMessage, BenchmarkQuestion, BenchmarkResult, BenchmarkSession,
     QuestionCategory, QuestionResult,
@@ -32,7 +31,7 @@ pub struct LongMemEvalHarness {
     ingester: SessionIngester,
     answerer: AnswerGenerator,
     judge: Judge,
-    result_storage: Option<ResultStorage>,
+
 }
 
 impl LongMemEvalHarness {
@@ -48,7 +47,6 @@ impl LongMemEvalHarness {
             ingester,
             answerer,
             judge,
-            result_storage: None,
         }
     }
 
@@ -59,14 +57,7 @@ impl LongMemEvalHarness {
             ingester: SessionIngester::new(IngesterConfig::default()),
             answerer: AnswerGenerator::new(AnswererConfig::default()),
             judge: Judge::new(JudgeConfig::default()),
-            result_storage: None,
         }
-    }
-
-    /// Set result storage
-    pub fn with_result_storage(mut self, storage: ResultStorage) -> Self {
-        self.result_storage = Some(storage);
-        self
     }
 
     /// Get the configuration
@@ -149,12 +140,6 @@ impl LongMemEvalHarness {
 
         // Calculate scores
         result = result.calculate_scores();
-
-        // Save results if storage is configured
-        if let Some(ref storage) = self.result_storage {
-            storage.save_result(&result)?;
-            tracing::info!("Results saved to database");
-        }
 
         // Print summary
         self.print_summary(&result);

@@ -5,7 +5,7 @@ use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::Json;
 
-use crate::error::{AppError, AppResult};
+use crate::error::AppResult;
 use crate::state::AppState;
 use engram_core::api::HealthResponse;
 
@@ -27,20 +27,12 @@ pub async fn health_check(
         .await
         .unwrap_or(false);
 
-    let sqlite_ok = {
-        let db = state
-            .database
-            .lock()
-            .map_err(|e| AppError::Internal(format!("Database lock poisoned: {e}")))?;
-        db.conn().execute_batch("SELECT 1").is_ok()
-    };
-
-    if qdrant_ok && sqlite_ok {
+    if qdrant_ok {
         Ok((StatusCode::OK, Json(HealthResponse::healthy())))
     } else {
         Ok((
             StatusCode::SERVICE_UNAVAILABLE,
-            Json(HealthResponse::degraded(qdrant_ok, sqlite_ok)),
+            Json(HealthResponse::degraded(qdrant_ok)),
         ))
     }
 }

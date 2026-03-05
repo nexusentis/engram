@@ -27,7 +27,6 @@ rand.workspace = true
 reqwest.workspace = true
 async-trait.workspace = true
 qdrant-client.workspace = true
-rusqlite.workspace = true
 
 [dev-dependencies]
 tokio-test.workspace = true

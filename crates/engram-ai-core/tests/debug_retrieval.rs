@@ -2,7 +2,7 @@
 //!
 //! Run with: cargo test --test debug_retrieval -- --nocapture
 
-use engram_core::storage::{QdrantConfig, QdrantStorage};
+use engram_ai_core::storage::{QdrantConfig, QdrantStorage};
 
 #[tokio::test]
 async fn debug_coupon_memories() {

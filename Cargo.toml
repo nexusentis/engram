@@ -30,9 +30,6 @@ serde_json = "1.0"
 # Vector database
 qdrant-client = "1.7"
 
-# SQLite
-rusqlite = { version = "0.30", features = ["bundled"] }
-
 # LLM clients
 reqwest = { version = "0.11", features = ["json", "rustls-tls", "multipart"], default-features = false }
 
