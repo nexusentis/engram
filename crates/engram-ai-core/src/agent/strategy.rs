@@ -1,6 +1,9 @@
 //! Question strategy detection for category-specific prompts.
 
-/// Question strategy for category-specific prompts
+/// Question strategy for category-specific prompts.
+///
+/// Detected from question text using heuristic keyword matching.
+/// Ordering: Update → Temporal → Enumeration → Preference → Default.
 #[derive(Debug, Clone, PartialEq)]
 pub enum QuestionStrategy {
     Enumeration,
@@ -10,15 +13,13 @@ pub enum QuestionStrategy {
     Default,
 }
 
-/// Detect question strategy from question text using heuristic keyword matching
-pub(super) fn detect_question_strategy(question: &str) -> QuestionStrategy {
+/// Detect question strategy from question text using heuristic keyword matching.
+pub fn detect_question_strategy(question: &str) -> QuestionStrategy {
     let q = question.to_lowercase();
 
     // Update-first check: "current" signals Update when the question is about
     // the current STATE of something (duration, status), not when "current" is just
     // a modifier in a temporal sub-clause like "before I started my current job"
-    // Pattern: "my current X" where the question asks about X directly
-    // Counter-pattern: "before/after/since my current" → temporal, current is incidental
     let has_current = q.contains("current ") || q.contains("currently ");
     let current_is_incidental = q.contains("before my current")
         || q.contains("before i started my current")
@@ -60,7 +61,6 @@ pub(super) fn detect_question_strategy(question: &str) -> QuestionStrategy {
         return QuestionStrategy::Temporal;
     }
     // "how many days/weeks/months/years" is temporal ONLY when followed by temporal context
-    // (e.g. "how many weeks had passed") not comparison (e.g. "how many years older")
     let duration_units = [
         "how many days",
         "how many weeks",
@@ -73,8 +73,7 @@ pub(super) fn detect_question_strategy(question: &str) -> QuestionStrategy {
     {
         return QuestionStrategy::Temporal;
     }
-    // "before" and "after" are temporal only when they appear as standalone temporal markers
-    // (not in phrases like "before answering", "after that")
+    // "before" and "after" are temporal only as standalone temporal markers
     if q.contains("before i")
         || q.contains("after i")
         || q.contains("before my")
@@ -82,7 +81,7 @@ pub(super) fn detect_question_strategy(question: &str) -> QuestionStrategy {
     {
         return QuestionStrategy::Temporal;
     }
-    // Match "in 20XX" year patterns (simple string scan instead of regex)
+    // Match "in 20XX" year patterns
     if let Some(pos) = q.find("in 20") {
         if q.len() >= pos + 7 && q[pos + 5..pos + 7].chars().all(|c| c.is_ascii_digit()) {
             return QuestionStrategy::Temporal;
@@ -104,7 +103,7 @@ pub(super) fn detect_question_strategy(question: &str) -> QuestionStrategy {
         return QuestionStrategy::Enumeration;
     }
 
-    // Update patterns (note: "current" already handled above as update-first check)
+    // Update patterns (note: "current" already handled above)
     let update_patterns = [
         "latest",
         "now ",
@@ -123,7 +122,6 @@ pub(super) fn detect_question_strategy(question: &str) -> QuestionStrategy {
         return QuestionStrategy::Update;
     }
     // Mutable-state patterns: questions about things that commonly change over time
-    // "where do I live", "what is my mortgage", "what is my personal best", etc.
     let mutable_state = [
         "where do i live",
         "where am i living",
@@ -139,7 +137,6 @@ pub(super) fn detect_question_strategy(question: &str) -> QuestionStrategy {
         "what is my record",
         "where am i going",
         "what am i planning",
-        // P13: Past-tense variants for questions about historical mutable state
         "what was my personal best",
         "what was my best time",
         "what was my record",
@@ -151,9 +148,7 @@ pub(super) fn detect_question_strategy(question: &str) -> QuestionStrategy {
         return QuestionStrategy::Update;
     }
 
-    // Fix D: Computation patterns — detect before Preference to avoid misrouting
-    // Questions asking for percentage, discount, age difference etc. need cross-session data
-    // BUT exclude Yes/No questions (starting with auxiliary verbs) — those are comparisons, not computations
+    // Computation patterns — detect before Preference to avoid misrouting
     let is_yes_no = q.starts_with("did ")
         || q.starts_with("is ")
         || q.starts_with("was ")
@@ -179,10 +174,10 @@ pub(super) fn detect_question_strategy(question: &str) -> QuestionStrategy {
         "how much less",
     ];
     if !is_yes_no && computation_patterns.iter().any(|p| q.contains(p)) {
-        return QuestionStrategy::Enumeration; // Route to Enumeration for thorough search
+        return QuestionStrategy::Enumeration;
     }
 
-    // Preference patterns (includes advice-seeking where user expects personalized response)
+    // Preference patterns (includes advice-seeking)
     let pref_patterns = [
         "favorite",
         "prefer",
@@ -215,7 +210,7 @@ pub(super) fn detect_question_strategy(question: &str) -> QuestionStrategy {
 }
 
 /// Check if a question is asking for a count or enumeration.
-pub(super) fn is_counting_question(question: &str) -> bool {
+pub fn is_counting_question(question: &str) -> bool {
     let q = question.to_lowercase();
     let count_patterns = [
         "how many",
@@ -232,7 +227,7 @@ pub(super) fn is_counting_question(question: &str) -> bool {
 }
 
 /// Detect if a question is asking for a sum/total (not a difference or comparison).
-pub(super) fn is_sum_question(question: &str) -> bool {
+pub fn is_sum_question(question: &str) -> bool {
     let q = question.to_lowercase();
     let has_sum_intent = [
         "total cost",
@@ -248,7 +243,6 @@ pub(super) fn is_sum_question(question: &str) -> bool {
     ]
     .iter()
     .any(|p| q.contains(p));
-    // Exclude difference/comparison questions
     let is_difference = [
         "more than",
         "less than",

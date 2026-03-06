@@ -3,6 +3,7 @@
 //! Core library providing types, storage, extraction, embedding, and retrieval
 //! for a high-performance memory system for AI agents.
 
+pub mod agent;
 pub mod api;
 pub mod config;
 pub mod embedding;
@@ -15,7 +16,7 @@ pub mod storage;
 pub mod types;
 
 // Config
-pub use config::Config;
+pub use config::{AgentConfig, Config, EnsembleConfig, GateConfig};
 
 // Error types
 pub use error::{Error, Result};
@@ -42,4 +43,4 @@ pub use retrieval::{AbstentionConfig, ConfidenceScorer, QueryAnalyzer, RerankedR
 pub use storage::{QdrantConfig, QdrantStorage};
 
 // Memory system facade
-pub use memory_system::{MemorySystem, MemorySystemBuilder};
+pub use memory_system::{IngestResult, MemorySystem, MemorySystemBuilder};

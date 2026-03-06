@@ -57,12 +57,13 @@ impl QdrantStorage {
         Self { client, config }
     }
 
-    /// Initialize all four collections with indexes
+    /// Initialize all collections (4 fact collections + messages) with indexes
     pub async fn initialize(&self) -> Result<()> {
         for collection in COLLECTIONS {
             self.create_collection_if_not_exists(collection).await?;
             self.create_indexes(collection).await?;
         }
+        self.initialize_messages_collection().await?;
         Ok(())
     }
 
@@ -701,6 +702,7 @@ impl QdrantStorage {
         id: &str,
         vector: Vec<f32>,
         content: &str,
+        user_id: &str,
         session_id: &str,
         turn_index: u64,
         role: &str,
@@ -712,6 +714,12 @@ impl QdrantStorage {
             "content".to_string(),
             Value {
                 kind: Some(Kind::StringValue(content.to_string())),
+            },
+        );
+        payload.insert(
+            "user_id".to_string(),
+            Value {
+                kind: Some(Kind::StringValue(user_id.to_string())),
             },
         );
         payload.insert(
@@ -1231,7 +1239,7 @@ impl QdrantStorage {
         Ok(total)
     }
 
-    /// Get memory counts per collection
+    /// Get memory counts per collection (facts + messages)
     pub async fn get_collection_counts(&self) -> Result<Vec<(String, u64)>> {
         let mut counts = Vec::new();
 
@@ -1244,6 +1252,19 @@ impl QdrantStorage {
 
             let count = info.result.and_then(|r| r.points_count).unwrap_or(0);
             counts.push((collection.to_string(), count));
+        }
+
+        // Include messages collection if it exists
+        if let Ok(exists) = self.client.collection_exists(MESSAGES_COLLECTION).await {
+            if exists {
+                let info = self
+                    .client
+                    .collection_info(MESSAGES_COLLECTION)
+                    .await
+                    .map_err(|e| StorageError::Qdrant(e.to_string()))?;
+                let count = info.result.and_then(|r| r.points_count).unwrap_or(0);
+                counts.push((MESSAGES_COLLECTION.to_string(), count));
+            }
         }
 
         Ok(counts)

@@ -1,9 +1,8 @@
 //! Tests for the answerer module.
 
 use super::*;
-use super::prompting::{build_agent_system_prompt, strategy_guidance};
+use engram::agent::{build_agent_system_prompt, strategy_guidance, is_counting_question, is_sum_question};
 use super::reduction::extract_dollar_amounts;
-use super::strategy::{is_counting_question, is_sum_question};
 use crate::QuestionCategory;
 use engram::retrieval::AbstentionConfig;
 

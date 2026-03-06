@@ -66,6 +66,7 @@ async fn live_app_state(qdrant_url: &str) -> AppState {
         security: SecurityConfig::default(),
         mcp_backend: Arc::new(memory_system),
         mcp_sessions: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
+        memory_agent: None,
     }
 }
 

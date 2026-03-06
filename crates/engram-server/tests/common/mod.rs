@@ -81,6 +81,7 @@ pub fn dummy_app_state_with_auth(auth_config: AuthConfig) -> AppState {
         security: SecurityConfig::default(),
         mcp_backend: Arc::new(memory_system),
         mcp_sessions: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
+        memory_agent: None,
     }
 }
 

@@ -19,6 +19,7 @@ path = "src/main.rs"
 
 [dependencies]
 engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.1.1" }
+engram-agent = { path = "../engram-agent", version = "0.1.1", features = ["memory"] }
 
 # Async runtime
 tokio.workspace = true

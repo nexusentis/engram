@@ -125,7 +125,7 @@ async fn cmd_init(
         .context("Failed to connect to Qdrant")?;
     qdrant.initialize().await
         .context("Failed to initialize Qdrant collections")?;
-    println!("  \x1b[32m✓\x1b[0m Created 4 collections (world, experience, opinion, observation)");
+    println!("  \x1b[32m✓\x1b[0m Created 5 collections (world, experience, opinion, observation, messages)");
 
     // Save configuration
     config.save(config_path)

@@ -27,6 +27,9 @@ pub enum Error {
 
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
+
+    #[error("Agent error: {0}")]
+    Agent(String),
 }
 
 #[derive(Error, Debug)]

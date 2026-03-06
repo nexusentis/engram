@@ -5,15 +5,13 @@
 //! and temporal-aware context building.
 
 mod config;
-mod prompting;
 mod reduction;
-mod strategy;
 #[cfg(test)]
 mod tests;
 mod types;
 
 pub use config::*;
-pub use strategy::QuestionStrategy;
+pub use engram::agent::QuestionStrategy;
 pub use types::*;
 
 use std::sync::Arc;
@@ -30,8 +28,7 @@ use engram::retrieval::{
 };
 use engram::storage::{QdrantConfig, QdrantStorage};
 
-use strategy::detect_question_strategy;
-use prompting::{strategy_guidance, build_agent_system_prompt};
+use engram::agent::{detect_question_strategy, strategy_guidance, build_agent_system_prompt};
 use reduction::reduce_count;
 
 // Re-export from engram-core — keeps all call sites working unchanged
@@ -51,7 +48,6 @@ pub struct AnswerGenerator {
     llm_client: Option<LlmClient>,
     confidence_scorer: ConfidenceScorer,
     query_analyzer: QueryAnalyzer,
-    graph_store: Option<Arc<engram::storage::GraphStore>>,
     /// P22: Fallback LLM client for ensemble routing
     fallback_llm_client: Option<LlmClient>,
     /// P22: Ensemble routing config
@@ -87,7 +83,6 @@ impl AnswerGenerator {
             llm_client: None,
             confidence_scorer,
             query_analyzer,
-            graph_store: None,
             fallback_llm_client: None,
             ensemble_config: None,
         }
@@ -120,12 +115,6 @@ impl AnswerGenerator {
     /// Set the LLM client
     pub fn with_llm_client(mut self, client: LlmClient) -> Self {
         self.llm_client = Some(client);
-        self
-    }
-
-    /// Set the SurrealDB graph store for graph-based retrieval
-    pub fn with_graph_store(mut self, store: Arc<engram::storage::GraphStore>) -> Self {
-        self.graph_store = Some(store);
         self
     }
 
@@ -172,7 +161,6 @@ impl AnswerGenerator {
             llm_client: Some(llm_client),
             confidence_scorer,
             query_analyzer,
-            graph_store: None,
             fallback_llm_client: None,
             ensemble_config: None,
         })
@@ -495,7 +483,7 @@ Answer:"#,
         for (date, sessions) in &dated {
             output.push_str(&format!(
                 "{}\n",
-                super::tools::format_date_header(date, question_date, self.config.relative_dates)
+                engram::agent::format_date_header(date, question_date, self.config.relative_dates)
             ));
             for (session_id, items) in sessions {
                 output.push_str(&format!("--- Session {} ---\n", session_id));
@@ -1436,7 +1424,7 @@ Answer:"#,
     async fn prefetch(
         &self,
         question: &str,
-        tool_executor: &super::tools::ToolExecutor,
+        tool_executor: &engram::agent::ToolExecutor,
         _strategy: &QuestionStrategy,
     ) -> Result<(String, Vec<String>)> {
         let explicit_k = self.config.prefetch_explicit;
@@ -1491,19 +1479,12 @@ Answer:"#,
             .as_ref()
             .ok_or_else(|| BenchmarkError::Answering("No embedding provider configured".into()))?;
 
-        let graph_available = self.config.enable_graph_retrieval && self.graph_store.is_some();
-        let mut tool_executor =
-            super::tools::ToolExecutor::new(Arc::clone(storage), Arc::clone(embedding_provider))
+        let embedder: Arc<dyn EmbeddingProvider> = Arc::clone(embedding_provider) as _;
+        let tool_executor =
+            engram::agent::ToolExecutor::new(Arc::clone(storage), embedder)
                 .with_reference_date(question.question_date)
                 .with_relative_dates(self.config.relative_dates)
                 .with_user_id(user_id);
-        // Always attach graph store to executor (it handles missing gracefully).
-        // Whether the LLM sees graph tool schemas is controlled per-question below.
-        if let Some(ref store) = self.graph_store {
-            if self.config.enable_graph_retrieval {
-                tool_executor = tool_executor.with_graph_store(Arc::clone(store));
-            }
-        }
 
         // Run query analyzer for temporal parity with non-agentic path
         // Use question_date as reference time for benchmark replay (otherwise "last month" anchors to now)
@@ -1529,12 +1510,8 @@ Answer:"#,
             strategy = QuestionStrategy::Temporal;
         }
 
-        // P18.1: Only expose graph tools for Enumeration strategy (not global)
-        let use_graph = graph_available
-            && matches!(strategy, QuestionStrategy::Enumeration);
-
         // Prefetch initial results (strategy-aware: boost for Enumeration)
-        let (mut prefetch_results, prefetch_fact_ids) = self.prefetch(&question.question, &tool_executor, &strategy).await?;
+        let (mut prefetch_results, _prefetch_fact_ids) = self.prefetch(&question.question, &tool_executor, &strategy).await?;
 
         // A4: Temporal auto-prefetch — if analyzer resolved date constraints, automatically
         // call get_by_date_range and append results to prefetch
@@ -1569,33 +1546,6 @@ Answer:"#,
                             );
                         }
                         _ => {}
-                    }
-                }
-            }
-        }
-
-        // P20: Behind-the-scenes graph augmentation (silent, strategy-aware)
-        if self.config.graph_augment.enabled {
-            if let Some(ref graph) = self.graph_store {
-                let should_augment = matches!(
-                    question.category,
-                    QuestionCategory::MultiSession
-                ) || matches!(strategy, QuestionStrategy::Enumeration);
-
-                if should_augment {
-                    let keywords = Self::extract_search_keywords(&question.question);
-                    match Self::graph_augment(
-                        graph, storage, user_id,
-                        &prefetch_fact_ids, &keywords,
-                        &self.config.graph_augment,
-                    ).await {
-                        Ok(graph_text) if !graph_text.is_empty() => {
-                            prefetch_results.push_str("\n\n");
-                            prefetch_results.push_str(&graph_text);
-                            eprintln!("[AGENT] P20 graph augment: injected {} chars", graph_text.len());
-                        }
-                        Ok(_) => eprintln!("[AGENT] P20 graph augment: no additional facts found"),
-                        Err(e) => eprintln!("[AGENT] P20 graph augment error: {}", e),
                     }
                 }
             }
@@ -1666,10 +1616,9 @@ Answer:"#,
             tool_result_limit: self.config.tool_result_limit,
         };
 
-        // Wrap ToolExecutor into Agent tools
-        let agent_tools = super::tool_adapter::wrap_tools(
+        // Wrap ToolExecutor into Agent tools (production tool set, no graph)
+        let agent_tools = engram_agent::memory::tool_adapter::wrap_tools(
             Arc::new(tool_executor),
-            use_graph,
         );
 
         // Create benchmark hook with all 17 gates
@@ -1786,211 +1735,6 @@ Answer:"#,
             .filter(|w| w.len() > 2 && !STOPWORDS.contains(&w.as_str()))
             .collect()
     }
-
-    /// P20: Behind-the-scenes graph augmentation.
-    /// Uses prefetch fact_ids to find linked entities in the graph, then does 1-hop
-    /// spreading activation to discover additional facts the vector search may have missed.
-    /// Returns formatted text to append to prefetch, or empty string if nothing found.
-    async fn graph_augment(
-        graph: &engram::storage::GraphStore,
-        storage: &QdrantStorage,
-        user_id: &str,
-        prefetch_fact_ids: &[String],
-        question_keywords: &[String],
-        config: &GraphAugmentConfig,
-    ) -> Result<String> {
-        use std::collections::{HashMap, HashSet};
-
-        let prefetch_set: HashSet<&str> = prefetch_fact_ids.iter().map(|s| s.as_str()).collect();
-
-        // Phase A: Seed entity extraction from prefetch fact_ids
-        let mut seed_entities: Vec<engram::storage::surrealdb_graph::GraphEntity> = Vec::new();
-        let mut seen_entity_ids: HashSet<String> = HashSet::new();
-
-        // Look up entities for each prefetch fact (cap at first 20 facts)
-        for fid in prefetch_fact_ids.iter().take(20) {
-            match graph.entities_for_fact(user_id, fid).await {
-                Ok(entities) => {
-                    for e in entities {
-                        if let Some(ref eid) = e.id {
-                            let key = eid.to_string();
-                            if !seen_entity_ids.contains(&key) {
-                                seen_entity_ids.insert(key);
-                                seed_entities.push(e);
-                            }
-                        }
-                    }
-                }
-                Err(e) => {
-                    eprintln!("[P20] entities_for_fact error for {}: {}", fid, e);
-                }
-            }
-        }
-
-        eprintln!(
-            "[P20] Phase A: {} seeds from {} prefetch fact_ids",
-            seed_entities.len(), prefetch_fact_ids.len()
-        );
-
-        // Fallback: fuzzy keyword search if <3 seeds
-        if seed_entities.len() < 3 {
-            for kw in question_keywords.iter().take(5) {
-                if let Ok(found) = graph.search_entities_fuzzy(user_id, kw, 3).await {
-                    for e in found {
-                        if let Some(ref eid) = e.id {
-                            let key = eid.to_string();
-                            if !seen_entity_ids.contains(&key) {
-                                seen_entity_ids.insert(key);
-                                seed_entities.push(e);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Sort by mention_count DESC, cap at seed_limit
-        seed_entities.sort_by(|a, b| b.mention_count.cmp(&a.mention_count));
-        seed_entities.truncate(config.seed_limit);
-
-        if seed_entities.is_empty() {
-            return Ok(String::new());
-        }
-
-        eprintln!(
-            "[P20] {} seed entities: {}",
-            seed_entities.len(),
-            seed_entities.iter().map(|e| e.name.as_str()).collect::<Vec<_>>().join(", ")
-        );
-
-        // Phase B: 1-hop spreading activation
-        // Score: seed mention = 1.0, neighbor mention = 0.5, multi-link bonus = 1.5x per extra link
-        let mut fact_scores: HashMap<String, f64> = HashMap::new();
-
-        for seed in &seed_entities {
-            let eid = match &seed.id {
-                Some(id) => id,
-                None => continue,
-            };
-
-            // Get facts for seed entity
-            if let Ok(fids) = graph.facts_for_entity(user_id, eid).await {
-                for fid in fids.into_iter().take(config.facts_per_entity) {
-                    if !prefetch_set.contains(fid.as_str()) {
-                        let entry = fact_scores.entry(fid).or_insert(0.0);
-                        if *entry == 0.0 {
-                            *entry = 1.0;
-                        } else {
-                            *entry *= 1.5; // multi-link bonus
-                        }
-                    }
-                }
-            }
-
-            // Get 1-hop neighbors
-            if let Ok(neighbors) = graph.neighbors(user_id, eid, 1).await {
-                for neighbor in neighbors.iter().take(config.neighbors_per_seed) {
-                    let nid = match &neighbor.id {
-                        Some(id) => id,
-                        None => continue,
-                    };
-                    if let Ok(nfids) = graph.facts_for_entity(user_id, nid).await {
-                        for fid in nfids.into_iter().take(config.facts_per_neighbor) {
-                            if !prefetch_set.contains(fid.as_str()) {
-                                let entry = fact_scores.entry(fid).or_insert(0.0);
-                                if *entry == 0.0 {
-                                    *entry = 0.5;
-                                } else {
-                                    *entry *= 1.5; // multi-link bonus
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if fact_scores.is_empty() {
-            return Ok(String::new());
-        }
-
-        // Take top fact_limit scored facts
-        let mut scored: Vec<(String, f64)> = fact_scores.into_iter().collect();
-        scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
-        scored.truncate(config.fact_limit);
-
-        eprintln!("[P20] {} candidate graph facts (top scores: {})",
-            scored.len(),
-            scored.iter().map(|(_, s)| format!("{:.1}", s)).collect::<Vec<_>>().join(", ")
-        );
-
-        // Phase C: Fetch from Qdrant and format
-        let mut entries: Vec<(String, String, String)> = Vec::new(); // (date, session, content)
-        for (fid, _score) in &scored {
-            match storage.get_point_by_id_any_collection(fid).await {
-                Ok(Some(point)) => {
-                    let payload = &point.payload;
-                    let content = payload.get("content")
-                        .and_then(|v| v.kind.as_ref())
-                        .and_then(|k| match k {
-                            qdrant_client::qdrant::value::Kind::StringValue(s) => Some(s.clone()),
-                            _ => None,
-                        })
-                        .unwrap_or_default();
-                    let session = payload.get("session_id")
-                        .and_then(|v| v.kind.as_ref())
-                        .and_then(|k| match k {
-                            qdrant_client::qdrant::value::Kind::StringValue(s) => Some(s.clone()),
-                            _ => None,
-                        })
-                        .unwrap_or_else(|| "unknown".to_string());
-                    let date = payload.get("t_valid")
-                        .and_then(|v| v.kind.as_ref())
-                        .and_then(|k| match k {
-                            qdrant_client::qdrant::value::Kind::StringValue(s) => {
-                                // t_valid is ISO format, take first 10 chars for date
-                                Some(if s.len() >= 10 { s[..10].replace('-', "/") } else { s.clone() })
-                            },
-                            _ => None,
-                        })
-                        .unwrap_or_else(|| "unknown".to_string());
-                    if !content.is_empty() {
-                        entries.push((date, session, content));
-                    }
-                }
-                Ok(None) => {
-                    eprintln!("[P20] fact {} not found in Qdrant", fid);
-                }
-                Err(e) => {
-                    eprintln!("[P20] Qdrant lookup error for {}: {}", fid, e);
-                }
-            }
-        }
-
-        if entries.is_empty() {
-            return Ok(String::new());
-        }
-
-        // Format as date-grouped text (same style as prefetch)
-        let mut by_date: std::collections::BTreeMap<String, Vec<(String, String)>> =
-            std::collections::BTreeMap::new();
-        for (date, session, content) in &entries {
-            by_date.entry(date.clone()).or_default().push((session.clone(), content.clone()));
-        }
-
-        let mut output = format!("=== Graph-Linked Context ({} additional facts) ===\n", entries.len());
-        for (date, facts) in &by_date {
-            output.push_str(&format!("--- {} ---\n", date));
-            for (session, content) in facts {
-                output.push_str(&format!("  (session: {}) {}\n", session, content));
-            }
-        }
-
-        Ok(output)
-    }
-
-    // NOTE: extract_comparison_slots, collect_tool_results, collect_retrieval_results,
-    // and extract_latest_dated_content have been moved to gates.rs
 
     /// Deterministic post-processing resolver.
     /// Applied AFTER the agent produces an answer, BEFORE returning.

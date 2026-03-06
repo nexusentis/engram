@@ -8,7 +8,7 @@ publish = false
 
 [dependencies]
 engram = { package = "engram-ai", path = "../engram-ai", version = "0.1.1", features = ["graph", "metrics"] }
-engram-agent = { path = "../engram-agent", version = "0.1.1" }
+engram-agent = { path = "../engram-agent", version = "0.1.1", features = ["memory"] }
 
 tokio.workspace = true
 futures.workspace = true

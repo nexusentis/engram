@@ -1,9 +1,9 @@
 //! Prompt construction for strategy guidance and agentic system prompts.
 
-use super::QuestionStrategy;
+use super::strategy::QuestionStrategy;
 
-/// Category-specific guidance appended to the agent system prompt
-pub(super) fn strategy_guidance(strategy: &QuestionStrategy) -> &'static str {
+/// Category-specific guidance appended to the agent system prompt.
+pub fn strategy_guidance(strategy: &QuestionStrategy) -> &'static str {
     match strategy {
         QuestionStrategy::Enumeration => {
             r#"
@@ -127,8 +127,8 @@ COMMON MISTAKES: (1) Giving generic advice anyone could get from Google. (2) Onl
     }
 }
 
-/// Build system prompt for the agentic answering loop
-pub(super) fn build_agent_system_prompt(
+/// Build system prompt for the agentic answering loop.
+pub fn build_agent_system_prompt(
     question: &str,
     question_date: Option<chrono::DateTime<chrono::Utc>>,
 ) -> String {

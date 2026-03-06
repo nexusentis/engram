@@ -1,6 +1,6 @@
 //! Post-loop count and sum reduction logic.
 
-use super::strategy::{is_counting_question, is_sum_question};
+use engram::agent::{is_counting_question, is_sum_question};
 
 /// Extract items from a numbered/enumerated answer.
 /// Handles formats like "1) item", "1. item", "1: item" (line-start)

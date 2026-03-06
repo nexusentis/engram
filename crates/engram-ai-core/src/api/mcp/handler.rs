@@ -137,6 +137,13 @@ impl ToolDefinitions {
 ///
 /// Handles JSON-RPC requests for the MCP protocol. This handler processes
 /// protocol-level messages and routes tool calls to the appropriate handlers.
+/// Type alias for an external tool handler function.
+///
+/// Receives `(tool_name, arguments)` and returns a `ToolResult`.
+/// Used by the server layer to inject tools (e.g., `memory_answer`)
+/// that live outside of core.
+type ExternalToolHandler = Box<dyn Fn(&str, &Value) -> ToolResult + Send + Sync>;
+
 pub struct McpHandler {
     /// Server name
     server_name: String,
@@ -148,6 +155,10 @@ pub struct McpHandler {
     backend: Option<Arc<MemorySystem>>,
     /// Tokio runtime handle for blocking on async calls
     rt_handle: Option<tokio::runtime::Handle>,
+    /// Additional tool definitions provided by the server layer.
+    extra_tools: Vec<Tool>,
+    /// Handler for extra tools. Takes (tool_name, args) -> ToolResult.
+    extra_tool_handler: Option<ExternalToolHandler>,
 }
 
 impl McpHandler {
@@ -159,6 +170,8 @@ impl McpHandler {
             initialized: false,
             backend: None,
             rt_handle: None,
+            extra_tools: Vec::new(),
+            extra_tool_handler: None,
         }
     }
 
@@ -179,7 +192,23 @@ impl McpHandler {
             initialized: false,
             backend: Some(backend),
             rt_handle: Some(handle),
+            extra_tools: Vec::new(),
+            extra_tool_handler: None,
         }
+    }
+
+    /// Register additional tools provided by the server layer.
+    ///
+    /// The handler function is called for any `tools/call` matching an extra tool name.
+    /// It runs on a blocking thread, so it may call `Handle::block_on()` for async work.
+    pub fn with_extra_tools(
+        mut self,
+        tools: Vec<Tool>,
+        handler: impl Fn(&str, &Value) -> ToolResult + Send + Sync + 'static,
+    ) -> Self {
+        self.extra_tools = tools;
+        self.extra_tool_handler = Some(Box::new(handler));
+        self
     }
 
     /// Create a handler with default server info (stub mode).
@@ -243,9 +272,9 @@ impl McpHandler {
 
     /// Handle tools/list request
     fn handle_list_tools(&self, id: Option<Value>) -> McpResponse {
-        let result = ListToolsResult {
-            tools: ToolDefinitions::all(),
-        };
+        let mut tools = ToolDefinitions::all();
+        tools.extend(self.extra_tools.clone());
+        let result = ListToolsResult { tools };
 
         McpResponse::success(id, serde_json::to_value(result).unwrap_or_default())
     }
@@ -272,7 +301,19 @@ impl McpHandler {
             }
         };
 
-        // Validate tool exists
+        // Check extra tools first (e.g., memory_answer from server layer)
+        if let Some(ref handler) = self.extra_tool_handler {
+            if self.extra_tools.iter().any(|t| t.name == params.name) {
+                let args = params.arguments.unwrap_or_default();
+                let result = handler(&params.name, &args);
+                return McpResponse::success(
+                    id,
+                    serde_json::to_value(result).unwrap_or_default(),
+                );
+            }
+        }
+
+        // Validate tool exists in built-in tools
         let valid_tools = ["memory_add", "memory_search", "memory_get", "memory_delete"];
         if !valid_tools.contains(&params.name.as_str()) {
             let result = ToolResult::error(format!("Unknown tool: {}", params.name));
@@ -368,10 +409,10 @@ impl McpHandler {
                 }
 
                 match handle.block_on(backend.ingest(conversation)) {
-                    Ok(ids) => ToolResult::text(format!(
+                    Ok(result) => ToolResult::text(format!(
                         "Extracted {} memories: {}",
-                        ids.len(),
-                        ids.iter()
+                        result.memory_ids.len(),
+                        result.memory_ids.iter()
                             .map(|id| id.to_string())
                             .collect::<Vec<_>>()
                             .join(", ")

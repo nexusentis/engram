@@ -20,7 +20,7 @@ use crate::types::{BenchmarkQuestion, QuestionCategory};
 use engram::embedding::{EmbeddingProvider, RemoteEmbeddingProvider};
 use engram::storage::QdrantStorage;
 
-use super::tools::ToolExecutor;
+use engram::agent::ToolExecutor;
 
 // ---- Types ----
 
@@ -330,7 +330,8 @@ async fn run_agentic_synthetic(
     config: &RecallConfig,
 ) -> Option<QuestionRecall> {
     let user_id = format!("user_{}", question.id);
-    let executor = ToolExecutor::new(storage, embedding_provider)
+    let embedder: Arc<dyn engram::embedding::EmbeddingProvider> = embedding_provider;
+    let executor = ToolExecutor::new(storage, embedder)
         .with_user_id(&user_id)
         .with_reference_date(question.question_date)
         .with_relative_dates(false);

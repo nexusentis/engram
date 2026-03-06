@@ -2,7 +2,7 @@
 
 use engram::retrieval::AbstentionReason;
 
-use super::strategy::QuestionStrategy;
+use engram::agent::QuestionStrategy;
 use crate::types::RetrievedMemoryInfo;
 
 /// Single entry in the tool call trace

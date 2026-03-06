@@ -20,7 +20,7 @@
 //!     ConversationTurn::assistant("That's great!"),
 //! ]);
 //!
-//! let ids = system.ingest(conversation).await?;
+//! let result = system.ingest(conversation).await?;
 //! let results = system.search("user_1", "where does the user work?", 5).await?;
 //! # Ok(())
 //! # }
@@ -31,10 +31,23 @@ use uuid::Uuid;
 
 use crate::embedding::EmbeddingProvider;
 use crate::error::{Error, ExtractionError, Result, StorageError};
-use crate::extraction::{ApiExtractor, ApiExtractorConfig, Conversation, ConversationTurn, Extractor};
+use crate::extraction::{ApiExtractor, ApiExtractorConfig, Conversation, ConversationTurn};
 use crate::storage::{QdrantConfig, QdrantStorage};
 use crate::types::Memory;
 use crate::RemoteEmbeddingProvider;
+
+/// Result of an ingestion operation.
+#[derive(Debug, Clone)]
+pub struct IngestResult {
+    /// UUIDs of the stored fact memories
+    pub memory_ids: Vec<Uuid>,
+    /// Number of facts extracted
+    pub facts_extracted: usize,
+    /// Deduplicated entity names found during extraction
+    pub entities_found: Vec<String>,
+    /// Number of raw message turns stored
+    pub messages_stored: usize,
+}
 
 /// High-level facade for the Engram memory system.
 ///
@@ -69,15 +82,17 @@ impl MemorySystem {
 
     // ── Ingest ──────────────────────────────────────────────────────────
 
-    /// Extract facts from a conversation and store them.
+    /// Extract facts from a conversation, store them, and store raw messages.
     ///
-    /// Returns the UUIDs of the stored memories.
-    pub async fn ingest(&self, conversation: Conversation) -> Result<Vec<Uuid>> {
+    /// Returns an [`IngestResult`] with memory IDs, entity names, and counts.
+    pub async fn ingest(&self, conversation: Conversation) -> Result<IngestResult> {
         let user_id = conversation.user_id.clone();
         let session_id = conversation.session_id.clone();
 
-        let facts = self.extractor.extract(&conversation).await?;
-        let mut ids = Vec::with_capacity(facts.len());
+        // Use extract_with_context to get entities alongside facts
+        let (facts, _registry) = self.extractor.extract_with_context(&conversation).await?;
+        let mut memory_ids = Vec::with_capacity(facts.len());
+        let mut entities_found = Vec::new();
 
         for fact in &facts {
             let mut memory = Memory::new(&user_id, &fact.content);
@@ -86,7 +101,8 @@ impl MemorySystem {
             memory.epistemic_type = fact.epistemic_type;
             memory.source_type = fact.source_type;
             memory.entity_ids = fact.entities.iter().map(|e| e.normalized_id.clone()).collect();
-            memory.entity_names = fact.entities.iter().map(|e| e.name.clone()).collect();
+            let entity_names: Vec<String> = fact.entities.iter().map(|e| e.name.clone()).collect();
+            memory.entity_names = entity_names.clone();
             memory.entity_types = fact.entities.iter().map(|e| e.entity_type.clone()).collect();
             memory.observation_level = fact.observation_level.clone();
             if let Some(t_valid) = fact.t_valid {
@@ -98,10 +114,50 @@ impl MemorySystem {
 
             let vector = self.embedder.embed_document(&fact.content).await?;
             self.qdrant.upsert_memory(&memory, vector).await?;
-            ids.push(memory.id);
+            memory_ids.push(memory.id);
+            entities_found.extend(entity_names);
         }
 
-        Ok(ids)
+        entities_found.sort();
+        entities_found.dedup();
+        let facts_extracted = facts.len();
+
+        // Store raw message turns in the messages collection
+        let session_id_str = session_id
+            .as_deref()
+            .unwrap_or_else(|| "default");
+        let mut messages_stored = 0;
+
+        for (idx, turn) in conversation.turns.iter().enumerate() {
+            let role_str = match turn.role {
+                crate::extraction::Role::User => "user",
+                crate::extraction::Role::Assistant => "assistant",
+                crate::extraction::Role::System => "system",
+            };
+            let msg_id = format!("{}_{}_{}", user_id, session_id_str, idx);
+            let vector = self.embedder.embed_document(&turn.content).await?;
+            self.qdrant
+                .upsert_message(
+                    &msg_id,
+                    vector,
+                    &turn.content,
+                    &user_id,
+                    session_id_str,
+                    idx as u64,
+                    role_str,
+                    turn.timestamp,
+                    None,
+                )
+                .await?;
+            messages_stored += 1;
+        }
+
+        Ok(IngestResult {
+            memory_ids,
+            facts_extracted,
+            entities_found,
+            messages_stored,
+        })
     }
 
     /// Ingest pre-built conversation turns for a user.
@@ -111,7 +167,7 @@ impl MemorySystem {
         &self,
         user_id: &str,
         turns: &[ConversationTurn],
-    ) -> Result<Vec<Uuid>> {
+    ) -> Result<IngestResult> {
         let conversation = Conversation::new(user_id, turns.to_vec());
         self.ingest(conversation).await
     }

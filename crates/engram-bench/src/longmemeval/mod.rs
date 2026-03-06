@@ -42,8 +42,6 @@ mod harness;
 mod ingester;
 mod judge;
 pub mod recall_harness;
-pub mod tool_adapter;
-pub mod tools;
 
 pub use answerer::{estimate_cost, set_global_model_registry, AnswerGenerator, AnswerResult, AnswererConfig, GraphAugmentConfig, LlmClient};
 pub use benchmark_config::{BenchmarkConfig, GateThresholds, LlmClientConfig, ModelProfile, ModelRegistry, EnsembleConfig};
@@ -59,7 +57,7 @@ pub use ingester::{
     SessionIngester, SessionStats, MAX_CONCURRENCY,
 };
 pub use judge::{Judge, JudgeConfig, JudgeResult};
-pub use tools::{
-    all_tool_schemas, tool_schemas, AgentResponse, CompletionResult, ToolCall,
-    ToolExecutionResult, ToolExecutor,
-};
+
+// Re-export core types that were formerly in bench tools/
+pub use engram::agent::{ToolExecutor, ToolExecutionResult};
+pub use engram::llm::{AgentResponse, CompletionResult, ToolCall};

@@ -2,12 +2,13 @@
 
 use qdrant_client::qdrant::value::Kind;
 
-// ---- Structured Tool Execution Result ----
-
-/// Structured result from tool execution (for recall harness)
+/// Structured result from tool execution.
+///
+/// Contains both the human-readable text output and structured metadata
+/// (sessions found, content snippets, result count) for downstream processing.
 #[derive(Debug, Clone)]
 pub struct ToolExecutionResult {
-    /// Human-readable text output (same as execute() returns)
+    /// Human-readable text output
     pub text: String,
     /// Session IDs found in the results
     pub sessions: std::collections::HashSet<String>,
@@ -15,17 +16,15 @@ pub struct ToolExecutionResult {
     pub content_snippets: Vec<String>,
     /// Number of results returned
     pub result_count: usize,
-    /// Qdrant point UUIDs for facts returned (P20: graph augmentation seeds)
+    /// Qdrant point UUIDs for facts returned
     pub fact_ids: Vec<String>,
 }
 
-// ---- Agent Response Types (re-exported from engram-core) ----
+// Re-export agent response types from LLM module
+pub use crate::llm::{AgentResponse, CompletionResult, ToolCall};
 
-pub use engram::llm::{AgentResponse, CompletionResult, ToolCall};
-
-// ---- Payload extraction helpers ----
-
-pub(super) fn get_string_payload(
+/// Extract a string value from a Qdrant payload map.
+pub fn get_string_payload(
     payload: &std::collections::HashMap<String, qdrant_client::qdrant::Value>,
     key: &str,
 ) -> String {
@@ -38,7 +37,8 @@ pub(super) fn get_string_payload(
         .unwrap_or_default()
 }
 
-pub(super) fn get_int_payload(
+/// Extract an integer value from a Qdrant payload map.
+pub fn get_int_payload(
     payload: &std::collections::HashMap<String, qdrant_client::qdrant::Value>,
     key: &str,
 ) -> i64 {

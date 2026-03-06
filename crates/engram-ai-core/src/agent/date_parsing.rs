@@ -2,9 +2,15 @@
 
 use qdrant_client::qdrant::Timestamp;
 
-/// Parse a date expression into a (start, end) range as RFC3339 strings.
-/// Supports: "YYYY/MM/DD", "YYYY-MM-DD", "Month YYYY", "YYYY", "Q1 2023", etc.
-pub(super) fn parse_date_expression(expr: &str) -> Option<(Timestamp, Timestamp)> {
+/// Parse a date expression into a (start, end) range as Qdrant Timestamps.
+/// Supports: "YYYY/MM/DD", "YYYY-MM-DD", "Month YYYY", "YYYY", "Q1 2023", holidays.
+///
+/// The `reference_year` parameter is used as fallback for holiday names that
+/// don't include a year. Pass `None` to default to the current year.
+pub fn parse_date_expression(
+    expr: &str,
+    reference_year: Option<i32>,
+) -> Option<(Timestamp, Timestamp)> {
     let expr = expr.trim().to_lowercase();
 
     // Try exact YYYY/MM/DD or YYYY-MM-DD
@@ -112,16 +118,16 @@ pub(super) fn parse_date_expression(expr: &str) -> Option<(Timestamp, Timestamp)
         }
     }
 
-    // Try holiday names anchored to a year (inferred from context or current year)
-    // We extract a year from the expression if present, otherwise default to 2023 (benchmark range)
+    // Try holiday names — extract year from expression if present, else use reference_year
     let year_hint = expr
         .chars()
         .filter(|c| c.is_ascii_digit())
         .collect::<String>();
+    let default_year = reference_year.unwrap_or_else(|| chrono::Utc::now().date_naive().year());
     let ref_year = if year_hint.len() == 4 {
-        year_hint.parse::<i32>().unwrap_or(2023)
+        year_hint.parse::<i32>().unwrap_or(default_year)
     } else {
-        2023
+        default_year
     };
 
     let holiday_date = if expr.contains("valentine") {
@@ -159,7 +165,9 @@ pub(super) fn parse_date_expression(expr: &str) -> Option<(Timestamp, Timestamp)
     None
 }
 
-/// Format a date header with optional relative days and day-of-week
+use chrono::Datelike;
+
+/// Format a date header with optional relative days and day-of-week.
 /// e.g., "=== Wednesday, 2023/06/15 (247 days ago) ==="
 pub fn format_date_header(
     date_str: &str,

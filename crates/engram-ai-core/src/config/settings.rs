@@ -11,6 +11,121 @@ pub struct Config {
     pub server: ServerConfig,
     pub extraction: ExtractionConfig,
     pub retrieval: RetrievalConfig,
+    /// Optional memory agent configuration (enables `memory_answer` MCP tool)
+    #[serde(default)]
+    pub agent: Option<AgentConfig>,
+}
+
+/// Configuration for the memory answering agent.
+///
+/// When present in the server TOML, enables the `memory_answer` MCP tool
+/// which uses an agentic loop with multiple retrieval strategies and quality gates.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(default)]
+pub struct AgentConfig {
+    /// LLM model for the primary answering agent
+    pub model: String,
+    /// Temperature for generation (0.0 = deterministic)
+    pub temperature: f32,
+    /// Maximum agentic loop iterations before breaking
+    pub max_iterations: usize,
+    /// Maximum characters per tool result
+    pub tool_result_limit: usize,
+    /// Maximum cost in USD per question before breaking
+    pub cost_limit: f32,
+    /// Whether to use strategy-aware prompting
+    pub use_strategy: bool,
+    /// Number of prefetch facts (explicit collection)
+    pub prefetch_explicit: usize,
+    /// Number of prefetch facts (deductive collection)
+    pub prefetch_deductive: usize,
+    /// Number of prefetch messages
+    pub prefetch_messages: usize,
+    /// Gate thresholds for quality validation
+    #[serde(default)]
+    pub gates: GateConfig,
+    /// Optional ensemble (fallback model) configuration
+    #[serde(default)]
+    pub ensemble: Option<EnsembleConfig>,
+}
+
+/// Quality gate thresholds for the memory agent.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(default)]
+pub struct GateConfig {
+    /// Minimum retrieval calls before accepting a preference answer
+    pub preference_min_retrievals: usize,
+    /// Minimum retrieval calls before accepting an enumeration answer
+    pub enumeration_min_retrievals: usize,
+    /// Minimum retrieval calls before accepting an update answer
+    pub update_min_retrievals: usize,
+    /// Minimum retrieval calls before accepting abstention
+    pub abstention_min_retrievals: usize,
+    /// Keyword overlap threshold for anti-abstention gate (0 = disabled)
+    pub anti_abstention_keyword_threshold: usize,
+    /// Keyword overlap threshold for preference anti-abstention (0 = disabled)
+    pub preference_keyword_threshold: usize,
+    /// Consecutive duplicate tool calls before loop break
+    pub loop_break_consecutive_dupes: usize,
+}
+
+/// Ensemble (fallback model) configuration for the memory agent.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(default)]
+pub struct EnsembleConfig {
+    pub enabled: bool,
+    pub fallback_model: String,
+    pub fallback_on_abstention: bool,
+    pub fallback_on_loop_break: bool,
+    /// Trigger fallback on high-iteration enumeration questions
+    pub fallback_on_enum_uncertainty: bool,
+    /// Minimum iterations before enumeration fallback fires
+    pub enum_uncertainty_min_iterations: usize,
+}
+
+impl Default for AgentConfig {
+    fn default() -> Self {
+        Self {
+            model: "gpt-4o".to_string(),
+            temperature: 0.0,
+            max_iterations: 20,
+            tool_result_limit: 12000,
+            cost_limit: 0.50,
+            use_strategy: true,
+            prefetch_explicit: 15,
+            prefetch_deductive: 10,
+            prefetch_messages: 20,
+            gates: GateConfig::default(),
+            ensemble: None,
+        }
+    }
+}
+
+impl Default for GateConfig {
+    fn default() -> Self {
+        Self {
+            preference_min_retrievals: 3,
+            enumeration_min_retrievals: 3,
+            update_min_retrievals: 3,
+            abstention_min_retrievals: 5,
+            anti_abstention_keyword_threshold: 0, // off by default in production
+            preference_keyword_threshold: 0,      // off by default in production
+            loop_break_consecutive_dupes: 3,
+        }
+    }
+}
+
+impl Default for EnsembleConfig {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            fallback_model: "gpt-4o".to_string(),
+            fallback_on_abstention: true,
+            fallback_on_loop_break: true,
+            fallback_on_enum_uncertainty: false,
+            enum_uncertainty_min_iterations: 8,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -119,6 +234,7 @@ impl Default for Config {
                 top_k: 20,
                 abstention_threshold: 0.4,
             },
+            agent: None,
         }
     }
 }

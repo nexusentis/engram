@@ -7,7 +7,7 @@
 //! Run:
 //!   cargo run --example basic_usage -p engram
 
-use engram::{Conversation, ConversationTurn, Memory, MemorySystem};
+use engram_ai::{Conversation, ConversationTurn, Memory, MemorySystem};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -29,8 +29,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ],
     );
 
-    let ids = system.ingest(conversation).await?;
-    println!("Ingested {} memories: {:?}", ids.len(), ids);
+    let result = system.ingest(conversation).await?;
+    println!("Ingested {} memories: {:?}", result.memory_ids.len(), result.memory_ids);
 
     // 2. Search for relevant memories
     let results = system.search(user_id, "where does the user work?", 5).await?;

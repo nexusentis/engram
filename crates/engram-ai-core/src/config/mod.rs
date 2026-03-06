@@ -4,4 +4,7 @@
 
 mod settings;
 
-pub use settings::{Config, ExtractionConfig, RetrievalConfig, SecurityConfig, ServerConfig};
+pub use settings::{
+    AgentConfig, Config, EnsembleConfig, ExtractionConfig, GateConfig, RetrievalConfig,
+    SecurityConfig, ServerConfig,
+};

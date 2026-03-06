@@ -4,10 +4,12 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Instant;
 
+use engram_agent::MemoryAgent;
 use engram_core::api::mcp::McpHandler;
 use engram_core::api::AuthConfig;
 use engram_core::config::SecurityConfig;
 use engram_core::extraction::{ApiExtractor, ApiExtractorConfig};
+use engram_core::llm::HttpLlmClient;
 use engram_core::storage::QdrantStorage;
 use engram_core::{Config, EmbeddingProvider, MemorySystem, RemoteEmbeddingProvider};
 
@@ -32,6 +34,8 @@ pub struct AppState {
     pub mcp_backend: Arc<MemorySystem>,
     /// Active MCP sessions keyed by session ID.
     pub mcp_sessions: Arc<tokio::sync::RwLock<HashMap<String, McpSession>>>,
+    /// Optional memory answering agent (enabled when `[agent]` config present + LLM key set).
+    pub memory_agent: Option<Arc<MemoryAgent>>,
 }
 
 impl AppState {
@@ -82,6 +86,9 @@ impl AppState {
             extractor.clone(),
         ));
 
+        // Optional MemoryAgent (requires [agent] config section + LLM API key)
+        let memory_agent = Self::build_memory_agent(config, &qdrant, &embedder);
+
         Ok(Self {
             qdrant,
             embedder,
@@ -90,7 +97,103 @@ impl AppState {
             security,
             mcp_backend,
             mcp_sessions: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
+            memory_agent,
         })
+    }
+
+    /// Build a MemoryAgent from config if `[agent]` section is present and an LLM key is available.
+    /// Returns None gracefully if config or credentials are missing.
+    fn build_memory_agent(
+        config: &Config,
+        qdrant: &Arc<QdrantStorage>,
+        embedder: &Arc<dyn EmbeddingProvider>,
+    ) -> Option<Arc<MemoryAgent>> {
+        let agent_config = config.agent.as_ref()?;
+
+        // Build LLM client — need OPENAI_API_KEY from env
+        let api_key = match std::env::var("OPENAI_API_KEY") {
+            Ok(key) => key,
+            Err(_) => {
+                tracing::warn!(
+                    "Memory agent disabled: OPENAI_API_KEY not set. \
+                     Set the env var to enable the memory_answer tool."
+                );
+                return None;
+            }
+        };
+
+        let llm: Arc<dyn engram_core::llm::LlmClient> = match HttpLlmClient::new(&api_key) {
+            Ok(client) => {
+                tracing::info!(
+                    model = %agent_config.model,
+                    "Memory agent enabled (memory_answer tool available)"
+                );
+                Arc::new(client)
+            }
+            Err(e) => {
+                tracing::warn!("Memory agent disabled: LLM client init failed: {}", e);
+                return None;
+            }
+        };
+
+        let agent = MemoryAgent::new(
+            agent_config.clone(),
+            Arc::clone(qdrant),
+            Arc::clone(embedder),
+            llm,
+        );
+
+        // Optional: build fallback LLM for ensemble
+        let agent = if let Some(ref ensemble) = agent_config.ensemble {
+            if ensemble.enabled {
+                match HttpLlmClient::new(&api_key) {
+                    Ok(fallback) => {
+                        tracing::info!(
+                            fallback_model = %ensemble.fallback_model,
+                            "Ensemble fallback enabled"
+                        );
+                        agent.with_fallback_llm(Arc::new(fallback))
+                    }
+                    Err(e) => {
+                        tracing::warn!("Ensemble fallback disabled: {}", e);
+                        agent
+                    }
+                }
+            } else {
+                agent
+            }
+        } else {
+            agent
+        };
+
+        Some(Arc::new(agent))
+    }
+
+    /// MCP tool definition for `memory_answer`.
+    pub fn memory_answer_tool_def() -> engram_core::api::mcp::Tool {
+        engram_core::api::mcp::Tool::new(
+            "memory_answer",
+            "Answer a natural language question using the user's stored memories. Uses multi-strategy agentic search with quality validation.",
+            serde_json::json!({
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "string",
+                        "description": "User identifier"
+                    },
+                    "question": {
+                        "type": "string",
+                        "description": "Natural language question"
+                    },
+                    "reference_time": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Optional temporal anchor for relative date questions (ISO 8601)"
+                    }
+                },
+                "required": ["user_id", "question"]
+            }),
+        )
     }
 
     fn load_auth_config() -> AuthConfig {

@@ -9,11 +9,16 @@ keywords.workspace = true
 categories.workspace = true
 description = "Reusable LLM agent loop with tool-calling and lifecycle hooks"
 
+[features]
+default = []
+memory = ["engram-core/default"]
+
 [dependencies]
 engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.1.1", default-features = false }
 async-trait.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+chrono.workspace = true
 tokio = { workspace = true, features = ["time"] }
 tracing.workspace = true
 thiserror.workspace = true

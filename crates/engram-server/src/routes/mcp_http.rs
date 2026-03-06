@@ -59,12 +59,58 @@ pub async fn mcp_post(
         // Create a new session.
         let sid = uuid::Uuid::now_v7().to_string();
         let rt_handle = tokio::runtime::Handle::current();
-        let h = McpHandler::with_backend(
+        let mut h = McpHandler::with_backend(
             "engram",
             env!("CARGO_PKG_VERSION"),
             state.mcp_backend.clone(),
-            rt_handle,
+            rt_handle.clone(),
         );
+
+        // Inject memory_answer tool if the agent is configured.
+        if let Some(ref agent) = state.memory_agent {
+            let agent = Arc::clone(agent);
+            let handle = rt_handle;
+            h = h.with_extra_tools(
+                vec![AppState::memory_answer_tool_def()],
+                move |_name, args| {
+                    let user_id = match args.get("user_id").and_then(|v| v.as_str()) {
+                        Some(id) if !id.is_empty() => id.to_string(),
+                        _ => return engram_core::api::mcp::ToolResult::error(
+                            "missing required parameter: user_id",
+                        ),
+                    };
+                    let question = match args.get("question").and_then(|v| v.as_str()) {
+                        Some(q) if !q.is_empty() => q.to_string(),
+                        _ => return engram_core::api::mcp::ToolResult::error(
+                            "missing required parameter: question",
+                        ),
+                    };
+                    let ref_time: Option<chrono::DateTime<chrono::Utc>> = args
+                        .get("reference_time")
+                        .and_then(|v| v.as_str())
+                        .and_then(|s| s.parse().ok());
+
+                    let agent = Arc::clone(&agent);
+                    match handle.block_on(agent.answer(&question, &user_id, ref_time)) {
+                        Ok(result) => engram_core::api::mcp::ToolResult::text(
+                            serde_json::json!({
+                                "answer": result.answer,
+                                "abstained": result.abstained,
+                                "strategy": format!("{:?}", result.strategy),
+                                "iterations": result.iterations,
+                                "total_time_ms": result.total_time_ms,
+                                "fallback_used": result.fallback_used,
+                            })
+                            .to_string(),
+                        ),
+                        Err(e) => engram_core::api::mcp::ToolResult::error(
+                            format!("memory_answer failed: {e}"),
+                        ),
+                    }
+                },
+            );
+        }
+
         let handler = Arc::new(std::sync::Mutex::new(h));
         let session = McpSession {
             handler: handler.clone(),

@@ -1,31 +1,23 @@
-//! Tool schema definitions for the agentic answering loop.
+//! Tool schema definitions for the memory agent.
+//!
+//! JSON schemas for OpenAI function-calling format. These define the 8 production
+//! tools: search_facts, search_messages, grep_messages, get_session_context,
+//! get_by_date_range, search_entity, date_diff, done.
 
 use serde_json::{json, Value};
 
-/// All tool schemas for the agentic answering loop
-pub fn all_tool_schemas() -> Vec<Value> {
-    tool_schemas(false)
-}
-
-/// Tool schemas with optional graph retrieval
-pub fn tool_schemas(include_graph: bool) -> Vec<Value> {
-    let mut schemas = vec![
+/// All production tool schemas (without graph tools).
+pub fn tool_schemas() -> Vec<Value> {
+    vec![
         search_facts_schema(),
         search_messages_schema(),
         grep_messages_schema(),
         get_session_context_schema(),
         get_by_date_range_schema(),
         search_entity_schema(),
-    ];
-    if include_graph {
-        schemas.push(graph_lookup_schema());
-        schemas.push(graph_relationships_schema());
-        schemas.push(graph_disambiguate_schema());
-        schemas.push(graph_enumerate_schema());
-    }
-    schemas.push(date_diff_schema());
-    schemas.push(done_schema());
-    schemas
+        date_diff_schema(),
+        done_schema(),
+    ]
 }
 
 fn search_facts_schema() -> Value {
@@ -186,104 +178,6 @@ fn search_entity_schema() -> Value {
     })
 }
 
-fn graph_lookup_schema() -> Value {
-    json!({
-        "type": "function",
-        "function": {
-            "name": "graph_lookup",
-            "description": "Look up an entity in the knowledge graph. Returns the entity profile including type, aliases, relationships, and associated facts. If multiple entities share the same name, returns all matches with distinguishing info.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "entity": {
-                        "type": "string",
-                        "description": "The entity name to look up."
-                    }
-                },
-                "required": ["entity"]
-            }
-        }
-    })
-}
-
-fn graph_relationships_schema() -> Value {
-    json!({
-        "type": "function",
-        "function": {
-            "name": "graph_relationships",
-            "description": "Find entities by relationship type. Query the knowledge graph for specific relationship patterns like 'who works for Acme Corp?' or 'all relationships for Alice'.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "entity": {
-                        "type": "string",
-                        "description": "The entity name to find relationships for."
-                    },
-                    "relation": {
-                        "type": "string",
-                        "description": "Relationship type filter: 'owned_by', 'located_in', 'works_for', 'part_of', 'related_to', 'associated_with', or 'all' for all types."
-                    }
-                },
-                "required": ["entity"]
-            }
-        }
-    })
-}
-
-fn graph_disambiguate_schema() -> Value {
-    json!({
-        "type": "function",
-        "function": {
-            "name": "graph_disambiguate",
-            "description": "Disambiguate entities with the same name using context clues. When multiple people/places/things share a name, provide context keywords to identify the right one.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "description": "The ambiguous entity name to disambiguate."
-                    },
-                    "context": {
-                        "type": "array",
-                        "items": { "type": "string" },
-                        "description": "Context keywords to help identify the right entity (e.g., ['yoga', 'Tuesday class'])."
-                    }
-                },
-                "required": ["name"]
-            }
-        }
-    })
-}
-
-fn graph_enumerate_schema() -> Value {
-    json!({
-        "type": "function",
-        "function": {
-            "name": "graph_enumerate",
-            "description": "List all entities of a given type from the knowledge graph. Returns total count and entity names with mention frequency. Prefer this for count/list questions when the answer maps to an entity type. Available types: person, organization, location, product, datetime, other.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "entity_type": {
-                        "type": "string",
-                        "description": "Entity type to list.",
-                        "enum": ["person", "organization", "location", "product", "datetime", "other"]
-                    },
-                    "keyword": {
-                        "type": "string",
-                        "description": "(optional) Filter entities whose name contains this keyword (case-insensitive)."
-                    },
-                    "limit": {
-                        "type": "integer",
-                        "description": "Max entities to return (default 30, max 100)."
-                    }
-                },
-                "required": ["entity_type"]
-            }
-        }
-    })
-}
-
 fn date_diff_schema() -> Value {
     json!({
         "type": "function",
@@ -318,6 +212,7 @@ fn date_diff_schema() -> Value {
     })
 }
 
+/// Schema for the done() tool that signals completion with a final answer.
 pub fn done_schema() -> Value {
     json!({
         "type": "function",

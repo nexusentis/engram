@@ -2296,9 +2296,6 @@ async fn test_validation_benchmark() {
         // Build answerer config from runtime config (TOML + env overrides already applied)
         let mut answerer_config = bench_config.to_answerer_config();
         let agentic = answerer_config.agentic;
-        let graph_augment = answerer_config.graph_augment.enabled;
-        let graph_retrieval = answerer_config.enable_graph_retrieval;
-
         if agentic {
             println!(
                 "=== Answering Phase (AGENTIC, max_iterations={}) ===\n",
@@ -2388,40 +2385,9 @@ async fn test_validation_benchmark() {
         } else {
             println!("Entity-linked: DISABLED (default)");
         }
-        if graph_augment {
-            println!("P20 Graph augment: ENABLED (seed_limit={}, fact_limit={}, neighbors_per_seed={})",
-                answerer_config.graph_augment.seed_limit,
-                answerer_config.graph_augment.fact_limit,
-                answerer_config.graph_augment.neighbors_per_seed);
-        } else {
-            println!("P20 Graph augment: DISABLED (default)");
-        }
-
         let mut answerer = AnswerGenerator::from_benchmark_config(answerer_config, &bench_config)
             .await
             .expect("Failed to create answerer");
-
-        // Load entity graph for graph-based retrieval or P20 graph augmentation
-        if graph_retrieval || graph_augment {
-            let feature_name = if graph_augment && graph_retrieval { "GRAPH_RETRIEVAL+GRAPH_AUGMENT" }
-                else if graph_augment { "GRAPH_AUGMENT" }
-                else { "GRAPH_RETRIEVAL" };
-            let graph_db_path = format!("{}/../../data/longmemeval/surrealdb", manifest_dir);
-            if std::path::Path::new(&graph_db_path).exists() {
-                match engram::storage::GraphStore::new_rocksdb(&graph_db_path).await {
-                    Ok(store) => {
-                        println!("SurrealDB graph store: LOADED from {} ({})", graph_db_path, feature_name);
-                        answerer = answerer.with_graph_store(std::sync::Arc::new(store));
-                    }
-                    Err(e) => {
-                        println!("WARNING: {}=1 but failed to load SurrealDB graph: {}", feature_name, e);
-                    }
-                }
-            } else {
-                println!("WARNING: {}=1 but no SurrealDB graph found at {}", feature_name, graph_db_path);
-                println!("  Run with GRAPH_STORE=1 during ingestion first.");
-            }
-        }
 
         // P22: Wire ensemble routing if enabled
         if let Some(ref ec) = bench_config.ensemble {
