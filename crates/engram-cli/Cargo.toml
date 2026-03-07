@@ -14,7 +14,7 @@ name = "engram"
 path = "src/main.rs"
 
 [dependencies]
-engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.1.1" }
+engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.2.0" }
 tokio.workspace = true
 clap.workspace = true
 tracing.workspace = true
