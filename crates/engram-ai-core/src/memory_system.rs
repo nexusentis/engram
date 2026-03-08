@@ -123,9 +123,14 @@ impl MemorySystem {
         let facts_extracted = facts.len();
 
         // Store raw message turns in the messages collection
-        let session_id_str = session_id
-            .as_deref()
-            .unwrap_or_else(|| "default");
+        let generated_session_id;
+        let session_id_str = match session_id.as_deref() {
+            Some(sid) => sid,
+            None => {
+                generated_session_id = Uuid::now_v7().to_string();
+                &generated_session_id
+            }
+        };
         let mut messages_stored = 0;
 
         for (idx, turn) in conversation.turns.iter().enumerate() {
