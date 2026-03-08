@@ -21,9 +21,11 @@ These fields exist in the API types for forward compatibility but are not yet wi
 
 ## Messages collection
 
-`POST /v1/messages/search` searches the `messages` Qdrant collection. However, the ingestion endpoint (`POST /v1/memories`) only stores **extracted facts** — it does not populate the `messages` collection with raw conversation messages.
+As of v0.2.1, `MemorySystem::ingest()` stores both extracted facts **and** raw conversation messages. The `messages` collection is populated automatically during ingestion.
 
-This means `POST /v1/messages/search` will return empty results unless you populate the `messages` collection through another mechanism (e.g., direct Qdrant API calls or the Rust SDK).
+When a `session_id` is provided, re-ingestion is idempotent: existing facts for that session are deleted and re-extracted, while messages are upserted by their deterministic ID (`{user_id}_{session_id}_{turn_index}`). If no `session_id` is provided, a unique one is generated per call.
+
+`POST /v1/messages/search` returns results from the `messages` collection.
 
 ## Environment variable overrides
 
