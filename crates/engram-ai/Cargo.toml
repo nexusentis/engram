@@ -15,7 +15,7 @@ graph = ["engram-core/graph"]
 metrics = ["engram-core/metrics"]
 
 [dependencies]
-engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.2.0", default-features = false }
+engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.2.1", default-features = false }
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["full"] }

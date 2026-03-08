@@ -18,8 +18,8 @@ name = "engram-server"
 path = "src/main.rs"
 
 [dependencies]
-engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.2.0" }
-engram-agent = { path = "../engram-agent", version = "0.2.0", features = ["memory"] }
+engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.2.1" }
+engram-agent = { path = "../engram-agent", version = "0.2.1", features = ["memory"] }
 
 # Async runtime
 tokio.workspace = true
@@ -64,4 +64,4 @@ utoipa.workspace = true
 [dev-dependencies]
 http-body-util = "0.1"
 tokio = { workspace = true, features = ["macros", "test-util"] }
-engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.2.0", features = ["test-helpers"] }
+engram-core = { package = "engram-ai-core", path = "../engram-ai-core", version = "0.2.1", features = ["test-helpers"] }

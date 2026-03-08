@@ -89,6 +89,12 @@ impl MemorySystem {
         let user_id = conversation.user_id.clone();
         let session_id = conversation.session_id.clone();
 
+        // If re-ingesting an existing session, delete old facts first so
+        // extraction produces a clean, up-to-date set (idempotent re-ingestion).
+        if let Some(ref sid) = session_id {
+            self.qdrant.delete_memories_by_session(&user_id, sid).await?;
+        }
+
         // Use extract_with_context to get entities alongside facts
         let (facts, _registry) = self.extractor.extract_with_context(&conversation).await?;
         let mut memory_ids = Vec::with_capacity(facts.len());

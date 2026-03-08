@@ -1,8 +1,8 @@
 use qdrant_client::qdrant::{
     value::Kind, Condition, CountPointsBuilder, CreateCollectionBuilder,
-    CreateFieldIndexCollectionBuilder, Distance, FieldType, Filter, GetPointsBuilder, PointId,
-    PointStruct, ScrollPointsBuilder, SearchPointsBuilder, SetPayloadPointsBuilder,
-    UpsertPointsBuilder, Value, VectorParamsBuilder,
+    CreateFieldIndexCollectionBuilder, DeletePointsBuilder, Distance, FieldType, Filter,
+    GetPointsBuilder, PointId, PointStruct, ScrollPointsBuilder, SearchPointsBuilder,
+    SetPayloadPointsBuilder, UpsertPointsBuilder, Value, VectorParamsBuilder,
 };
 use qdrant_client::Qdrant;
 use uuid::Uuid;
@@ -297,6 +297,56 @@ impl QdrantStorage {
         } else {
             Ok(false)
         }
+    }
+
+    /// Hard-delete all facts for a user + session across all fact collections.
+    ///
+    /// Used to make session re-ingestion idempotent: delete old facts before
+    /// re-extracting from the full conversation.
+    pub async fn delete_memories_by_session(
+        &self,
+        user_id: &str,
+        session_id: &str,
+    ) -> Result<u64> {
+        let filter = Filter::must(vec![
+            Condition::matches("user_id", user_id.to_string()),
+            Condition::matches("session_id", session_id.to_string()),
+        ]);
+        let mut total_deleted = 0u64;
+
+        for collection in COLLECTIONS {
+            let count_before = self
+                .client
+                .count(CountPointsBuilder::new(collection).filter(filter.clone()))
+                .await
+                .map(|r| r.result.map(|c| c.count).unwrap_or(0))
+                .unwrap_or(0);
+
+            if count_before > 0 {
+                self.client
+                    .delete_points(
+                        DeletePointsBuilder::new(collection).points(filter.clone()),
+                    )
+                    .await
+                    .map_err(|e| {
+                        StorageError::Qdrant(format!(
+                            "Failed to delete session '{session_id}' facts from '{collection}': {e}"
+                        ))
+                    })?;
+                total_deleted += count_before;
+            }
+        }
+
+        if total_deleted > 0 {
+            tracing::info!(
+                user_id,
+                session_id,
+                total_deleted,
+                "Deleted existing facts for session re-ingestion"
+            );
+        }
+
+        Ok(total_deleted)
     }
 
     /// Mark a memory as superseded (set is_latest=false, t_expired=now)
